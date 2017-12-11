@@ -1,0 +1,5 @@
+GET http://localhost:3030/quizzes
+
+###
+
+GET http://localhost:3030/quizzes/1
