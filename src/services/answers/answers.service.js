@@ -12,15 +12,4 @@ module.exports = function () {
     }))
     .use(errorHandler());
 
-//   Model.sync({
-//     force: true
-//   }).then(() => {
-//     if (app.service('answers').find()) return;
-
-//     app.service('answers').create({
-//       content: '1'
-//     }).then(answer => {
-//       console.log('Answer Created: ', JSON.stringify(answer));
-//     });
-//   });
 };

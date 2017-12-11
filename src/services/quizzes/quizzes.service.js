@@ -19,18 +19,4 @@ module.exports = function () {
   app
     .use('/quizzes', createService(options))
     .use(errorHandler());
-
-  // Model.sync({
-  //   force: true
-  // }).then(() => {
-  //   if(app.service('quizzes').find()) return;
-    
-  //   //Create a dummy Message
-  //   app.service('quizzes').create({
-  //     title: 'First Quiz',
-  //     author: 'dong cai',
-  //   }).then(quiz => {
-  //     console.log('Quiz Created: ', JSON.stringify(quiz));
-  //   });
-  // });
 };

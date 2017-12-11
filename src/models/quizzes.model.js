@@ -4,7 +4,7 @@ module.exports = function (app) {
   const sequelize = app.get('sequelize');
 
   const Model = sequelize.define('quiz', {
-    content: {
+    title: {
       type: Sequelize.TEXT,
       allowNull: false
     },

@@ -3,3 +3,19 @@ GET http://localhost:3030/quizzes
 ###
 
 GET http://localhost:3030/quizzes/1
+
+### 
+
+GET http://localhost:3030/questions
+
+###
+
+GET http://localhost:3030/questions/1
+
+###
+
+GET http://localhost:3030/answers
+
+###
+
+GET http://localhost:3030/answers/1

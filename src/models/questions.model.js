@@ -5,7 +5,7 @@ module.exports = function (app) {
 
   const Model = sequelize.define('question', {
     title: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false
     },
     type: {

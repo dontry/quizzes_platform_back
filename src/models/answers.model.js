@@ -16,6 +16,8 @@ module.exports = function (app) {
         this.setDataValue('type', val.toUpperCase());
       }
     }
+  }, {
+    freezeTableName: true
   });
 
   return Model;
