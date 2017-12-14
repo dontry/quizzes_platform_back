@@ -1,15 +1,16 @@
-const dbTest = require('./seed');
+const createDbTest = require('./seed');
 
 describe('Routes:', () => {
   // const models = app.get('models')
 
   before(async() => {
     this.server =  app.listen(3030);
-    const transactions = dbTest.clearAll(app);
+    const dbTest = createDbTest(app);
+    const transactions = dbTest.clearAll();
     await Promise.all(transactions);
-    await dbTest.seedQuiz(app);
-    await dbTest.seedQuestion(app);
-    await dbTest.seedAnswer(app);
+    await dbTest.seedQuiz();
+    await dbTest.seedQuestion();
+    await dbTest.seedAnswer();
   });
 
   after(done => {

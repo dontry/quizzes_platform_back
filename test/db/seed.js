@@ -1,7 +1,7 @@
 const modelNames = ['question', 'answer', 'quiz'];
 
-function clearAll(app) {
-  const models = app.get('models');
+function clearAll() {
+  const models = this.get('models');
   let transactions = [];
   modelNames.forEach(modelName => {
     const transaction = models[modelName].destroy({
@@ -13,8 +13,8 @@ function clearAll(app) {
   return transactions;
 }
 
-function seedQuiz(app) {
-  return app.service('quizzes').create([{
+function seedQuiz() {
+  return this.service('quizzes').create([{
     title: 'Test Quiz',
     author: 'Dong Cai'
   }, {
@@ -23,13 +23,13 @@ function seedQuiz(app) {
   }], ).catch(e => console.log(e));
 }
 
-async function seedQuestion(app) {
-  const Quiz = await app.service('quizzes').find({
+async function seedQuestion() {
+  const Quiz = await this.service('quizzes').find({
     query: {
       title: 'Test Quiz'
     }
   });
-  return app.service('questions').create([{
+  return this.service('questions').create([{
     title: 'How are you?',
     type: 'single',
     options: {
@@ -54,9 +54,9 @@ async function seedQuestion(app) {
   }]).catch(e => console.log(e));
 }
 
-async function seedAnswer(app) {
-  const Questions = await app.service('questions').find();
-  return app.service('answers').create([{
+async function seedAnswer() {
+  const Questions = await this.service('questions').find();
+  return this.service('answers').create([{
     content: {
       data: [1]
     },
@@ -80,9 +80,11 @@ async function seedAnswer(app) {
 }
 
 
-module.exports = {
-  clearAll,
-  seedQuiz,
-  seedQuestion,
-  seedAnswer
+module.exports = function(app) {
+  return {
+    clearAll: clearAll.bind(app),
+    seedQuiz: seedQuiz.bind(app),
+    seedQuestion: seedQuestion.bind(app),
+    seedAnswer: seedAnswer.bind(app)
+  };
 };
