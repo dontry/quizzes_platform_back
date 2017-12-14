@@ -1,6 +1,5 @@
-# quizzes-back
-
-> backend for quizzes platform
+# Quiz-back
+> The backend server for quizzes platform supported by featerjs
 
 ## About
 
