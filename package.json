@@ -22,8 +22,8 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "test": "SET NODE_ENV=test && mocha test/*.test.js",
-    "testdb": "SET NODE_ENV=test && mocha test/db/*.test.js",
+    "test": "mocha test/*.test.js",
+    "testdb": "mocha test/db/*.test.js",
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "start": "node src/",
     "debug": "node --nolazy --inspect-brk=9229 src/",
