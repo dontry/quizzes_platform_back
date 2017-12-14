@@ -1,8 +1,5 @@
 const dbTest = require('./seed');
-const app = require('../../src/app');
-const request = require('supertest');
-const expect = require('chai').expect;
-// const request = require('http').request;
+
 describe('Routes:', () => {
   // const models = app.get('models')
 

@@ -4,6 +4,6 @@ const app = require('../src/app');
 const assert = require('assert');
 
 global.app = app;
-global.request = supertest(app);
+global.request = supertest;
 global.expect = chai.expect;
 global.assert = assert;
