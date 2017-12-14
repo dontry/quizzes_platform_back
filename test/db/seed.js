@@ -1,5 +1,5 @@
 const modelNames = ['question', 'answer', 'quiz'];
-
+/* eslint-disable no-alert, no-console */
 function clearAll() {
   const models = this.get('models');
   let transactions = [];
@@ -76,7 +76,7 @@ async function seedAnswer() {
       data: [1, 2, 3]
     },
     questionId: Questions[3].id
-  }])
+  }]);
 }
 
 
