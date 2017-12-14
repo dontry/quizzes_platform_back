@@ -1,0 +1,26 @@
+language: node_js
+node_js:
+  - "node"
+
+install:
+  - npm install
+
+script:
+  - npm run cover
+
+script:
+  - npm test
+
+# Send coverage data to Coveralls
+after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+
+# Coveralls token
+service_name: travis-pro
+repo_token: aArWPfKKBc1t2E88NFSv5ITIiuTkt7V1w
+
+# whitelist
+branches:
+  only:
+    - master
+    - stable
+    - /^deploy-.*$/
