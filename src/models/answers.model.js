@@ -5,16 +5,8 @@ module.exports = function (app) {
 
   const Model = sequelize.define('answer', {
     content: {
-      type: Sequelize.STRING,
+      type: Sequelize.JSON,
       allowNull: false
-    },
-    type: {
-      type: Sequelize.ENUM('SINGLE', 'MULTIPLE', 'TEXT', 'NUMBER'),
-      allowNull: false,
-      defaultValue: 'SINGLE',
-      set(val) {
-        this.setDataValue('type', val.toUpperCase());
-      }
     }
   }, {
     freezeTableName: true
