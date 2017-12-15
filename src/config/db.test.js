@@ -8,6 +8,6 @@ const config = {
 
 module.exports = function (app) {
   if (!app.sequelize) {
-    return new Sequelize('quizzes_platform_test', 'root', 'mysql', config);
+    return new Sequelize('quizzes_platform_test', 'root', '', config);
   }
 };
