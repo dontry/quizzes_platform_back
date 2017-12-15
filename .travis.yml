@@ -2,6 +2,11 @@ language: node_js
 node_js:
   - "node"
 
+before_install:
+  - mysql -u root --password="mysql"
+  - mysql -e "CREATE DATABASE quizzes_platform_test;"
+
+
 install:
   - npm install
 
@@ -25,3 +30,7 @@ branches:
     - stable
     - travis
     - /^deploy-.*$/
+
+
+services:
+  - mysql
