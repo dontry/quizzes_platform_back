@@ -151,4 +151,4 @@ typings/
 .env
 
 # exlude travis.sql database instantiation file
-!test/travis.sql 
+!test/db/travis.sql 
