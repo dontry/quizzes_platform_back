@@ -7,12 +7,11 @@ services:
   - mysql
 
 before_install:
-  - mysql -u root --password=""
-  - CREATE DATABASE IF NOT EXISTS `quizzes_platform_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-  - USE `quizzes_platform_test`;
+  - ls
+  - mysql -u root --password="" < ./test/travis.sql
 
 install:
-  - npm instal
+  - npm install
 
 script:
   - npm run cover
