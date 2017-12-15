@@ -4,8 +4,13 @@ describe('Routes:', () => {
   // const models = app.get('models')
 
   before(async() => {
-    this.server =  app.listen(3030);
-    const dbTest = createDbTest(app);
+    this.server = app.listen(3030);
+    const dbTest = await createDbTest(app);
+    //I have to set a timeout to wait for the creation of data tables
+    const x =  new Promise((res, rej) => {setTimeout(() => {
+      res();
+    }, 100)});
+    await Promise.resolve(x);
     const transactions = dbTest.clearAll();
     await Promise.all(transactions);
     await dbTest.seedQuiz();
@@ -41,6 +46,34 @@ describe('Routes:', () => {
         });
     });
   });
+
+  describe('POST /quizzes', () => {
+    it('should create a quiz', done => {
+      request(app)
+      .post('/quizzes')
+      .send({title:'New Test Quiz', author:'Dong Cai'})
+      .set('Accept','application/json')
+      .end(function(err, res) {
+        expect(res.status).to.equal(201);
+        expect(res.body.title).to.equal('New Test Quiz');
+        expect(res.body.author).to.equal('Dong Cai');
+        done();
+      });
+    });
+  });
+
+  describe('POST /questions', () => {
+    it('should create a question', done => {
+      request(app)
+      .post('/questions')
+      .send({title:'Where are you from?', type: 'text', quizId: 1})
+      .set('Accept', 'application/json')
+      .end(function(err, res) {
+        expect(res.status).to.equal(201);
+        done();
+      });
+    })
+  })
 
   describe('GET /questions', () => {
     it('should get a list of questions', done => {
