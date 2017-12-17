@@ -7,8 +7,7 @@ services:
   - mysql
 
 before_install:
-  - ls
-  - 
+  - mysql -v
   - mysql -u root --password="" < ./test/db/travis.sql
 
 install:

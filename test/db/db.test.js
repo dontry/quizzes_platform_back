@@ -34,7 +34,7 @@ describe('Routes:', () => {
         });
     });
 
-    it('should get the quiz with title "Test Quiz"', done => {
+    it('should get the quiz with title Test Quiz"', done => {
       request(app)
         .get('/quizzes')
         .query({title: 'Test Quiz'})

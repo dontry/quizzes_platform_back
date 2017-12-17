@@ -27,7 +27,12 @@ module.exports = function (app) {
   });
 
   Model.associate = (models) => {
-    Model.hasMany(models['question']);
+    models['quiz'].hasMany(models['question'], {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
 
   return Model;

@@ -22,7 +22,12 @@ module.exports = function (app) {
   });
 
   Model.associate = (models) => {
-    Model.hasMany(models['answer']);
+    models['question'].hasMany(models['answer'], {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
 
   return Model;
