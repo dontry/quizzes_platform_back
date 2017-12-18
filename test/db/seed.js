@@ -1,3 +1,4 @@
+const timeout = require('../../src/utils/timeout');
 const modelNames = ['question', 'answer', 'quiz'];
 /* eslint-disable no-alert, no-console */
 function clearAll() {
@@ -84,7 +85,10 @@ async function createAll() {
   const transactions = clearAll.call(this);
   await Promise.all(transactions);
   await seedQuiz.call(this);
+ 
+  await Promise.resolve(timeout(500));
   await seedQuestion.call(this);
+  await Promise.resolve(timeout(500));
   await seedAnswer.call(this);
   sequelize.sync();
 }

@@ -1,4 +1,5 @@
 const createDbTest = require('./seed');
+const timeout = require('../../src/utils/timeout');
 
 describe('Routes:', () => {
   // const models = app.get('models')
@@ -7,12 +8,7 @@ describe('Routes:', () => {
     this.server = app.listen(3030);
     const dbTest = await createDbTest(app);
     //I have to set a timeout to wait for the creation of data tables
-    const timeout = new Promise((res, rej) => {
-      setTimeout(() => {
-        res();
-      }, 500)
-    });
-    await Promise.resolve(timeout);
+    await Promise.resolve(timeout(500));
     await dbTest.createAll();
   });
 
