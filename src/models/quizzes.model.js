@@ -28,7 +28,7 @@ module.exports = function (app) {
 
   Model.associate = (models) => {
     models['quiz'].hasMany(models['question'], {
-      onDelete: 'CASCADE',
+      onDelete: 'cascade',
       foreignKey: {
         allowNull: false
       }

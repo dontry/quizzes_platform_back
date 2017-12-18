@@ -88,7 +88,7 @@ async function createAll() {
   const transactions = clearAll.call(this);
   await Promise.all(transactions);
   await seedQuiz.call(this);
- 
+
   await seedQuestion.call(this);
   await seedAnswer.call(this);
   sequelize.sync();
