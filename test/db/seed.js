@@ -32,9 +32,9 @@ async function seedQuestion() {
   return this.service('questions').create([{
     title: 'How are you?',
     type: 'single',
-    options: {
+    options: JSON.stringify({
       data: ['Very good', 'Good', 'Average', 'Bad']
-    },
+    }),
     quizId: Quiz.id
   }, {
     title: 'How old are you?',
@@ -47,9 +47,9 @@ async function seedQuestion() {
   }, {
     title: 'What animals do you like?',
     type: 'multiple',
-    options: {
+    options: JSON.stringify({
       data: ['Cat', 'Dog', 'Frog', 'Rat', 'Unicorn']
-    },
+    }),
     quizId: Quiz.id
   }]).catch(e => console.log(e));
 }

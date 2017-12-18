@@ -104,9 +104,9 @@ describe('Routes:', () => {
             .send([{
               title: 'How do you go to work?',
               type: 'single',
-              options: {
+              options: JSON.stringify({
                 data: ['Public Transport', 'Uber', 'Taxi', 'Driving']
-              },
+              }),
               quizId: quizId
             }, {
               title: 'What is your favourite movie?',
@@ -115,9 +115,9 @@ describe('Routes:', () => {
             }, {
               title: 'What are your hobbies?',
               type: 'multiple',
-              options: {
+              options: JSON.stringify({
                 data: ['Reading', 'Programming', 'Swimming', 'Basketball']
-              },
+              }),
               quizId: quizId
             }])
             .set('Accept', 'application/json')
@@ -195,7 +195,7 @@ describe('Routes:', () => {
             .post('/answers')
             .send({
               content: JSON.stringify({
-                data: [1,2]
+                data: [1, 2]
               }),
               questionId: questionId
             })
@@ -204,7 +204,7 @@ describe('Routes:', () => {
               expect(res.status).to.equal(201);
               const answer = JSON.parse(res.body.content).data;
               expect(answer).to.be.an('array');
-              expect(answer).to.deep.equal([1,2]);
+              expect(answer).to.deep.equal([1, 2]);
               done();
             });
         });
@@ -212,6 +212,6 @@ describe('Routes:', () => {
   });
 
   describe('POST /answers', () => {
-  
+
   });
 });

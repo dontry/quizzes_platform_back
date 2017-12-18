@@ -16,7 +16,7 @@ module.exports = function (app) {
         this.setDataValue('type', val.toUpperCase());
       }
     },
-    options: Sequelize.JSON,
+    options: Sequelize.STRING,
   }, {
     freezeTableName: true
   });
