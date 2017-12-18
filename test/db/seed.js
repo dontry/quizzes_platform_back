@@ -79,10 +79,21 @@ async function seedAnswer() {
   }]);
 }
 
+async function createAll() {
+  const sequelize = this.get('sequelize');
+  const transactions = clearAll.call(this);
+  await Promise.all(transactions);
+  await seedQuiz.call(this);
+  await seedQuestion.call(this);
+  await seedAnswer.call(this);
+  sequelize.sync();
+}
+
 
 module.exports = function (app) {
   return {
     clearAll: clearAll.bind(app),
+    createAll: createAll.bind(app),
     seedQuiz: seedQuiz.bind(app),
     seedQuestion: seedQuestion.bind(app),
     seedAnswer: seedAnswer.bind(app)

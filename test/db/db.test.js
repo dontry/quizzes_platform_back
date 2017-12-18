@@ -7,17 +7,13 @@ describe('Routes:', () => {
     this.server = app.listen(3030);
     const dbTest = await createDbTest(app);
     //I have to set a timeout to wait for the creation of data tables
-    const x = new Promise((res, rej) => {
+    const timeout = new Promise((res, rej) => {
       setTimeout(() => {
         res();
       }, 500)
     });
-    await Promise.resolve(x);
-    const transactions = dbTest.clearAll();
-    await Promise.all(transactions);
-    await dbTest.seedQuiz();
-    await dbTest.seedQuestion();
-    await dbTest.seedAnswer();
+    await Promise.resolve(timeout);
+    await dbTest.createAll();
   });
 
   after(done => {
