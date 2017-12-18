@@ -57,30 +57,30 @@ async function seedQuestion() {
 async function seedAnswer() {
   const Questions = await this.service('questions').find();
   return this.service('answers').create([{
-    content: {
+    content: JSON.stringify({
       data: [1]
-    },
+    }),
     questionId: Questions[0].id
   }, {
-    content: {
+    content: JSON.stringify({
       data: 20
-    },
+    }),
     questionId: Questions[1].id
   }, {
-    content: {
+    content: JSON.stringify({
       data: 'Alex McQueen'
-    },
+    }),
     questionId: Questions[2].id
   }, {
-    content: {
+    content: JSON.stringify({
       data: [1, 2, 3]
-    },
+    }),
     questionId: Questions[3].id
   }]);
 }
 
 
-module.exports = function(app) {
+module.exports = function (app) {
   return {
     clearAll: clearAll.bind(app),
     seedQuiz: seedQuiz.bind(app),
