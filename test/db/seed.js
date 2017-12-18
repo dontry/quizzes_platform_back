@@ -19,9 +19,9 @@ function seedQuiz() {
     title: 'Test Quiz',
     author: 'Dong Cai'
   }, {
-    title: 'Test Quiz2',
+    title: 'Test Quiz 2',
     author: 'Dong Cai'
-  }], ).catch(e => console.log(e));
+  }], ).catch(e => console.info(e));
 }
 
 async function seedQuestion() {
@@ -30,33 +30,36 @@ async function seedQuestion() {
       title: 'Test Quiz'
     }
   });
+  console.info('Quiz instance: ' + JSON.stringify(Quiz));
+  console.info('Quiz ID: ' + Quiz.id);
   return this.service('questions').create([{
     title: 'How are you?',
     type: 'single',
     options: JSON.stringify({
       data: ['Very good', 'Good', 'Average', 'Bad']
     }),
-    quizId: Quiz.id
+    quizId: Quiz.data[0].id
   }, {
     title: 'How old are you?',
     type: 'number',
-    quizId: Quiz.id
+    quizId: Quiz.data[0].id
   }, {
     title: 'What is your name?',
     type: 'text',
-    quizId: Quiz.id
+    quizId: Quiz.data[0].id
   }, {
     title: 'What animals do you like?',
     type: 'multiple',
     options: JSON.stringify({
       data: ['Cat', 'Dog', 'Frog', 'Rat', 'Unicorn']
     }),
-    quizId: Quiz.id
+    quizId: Quiz.data[0].id
   }]).catch(e => console.log(e));
 }
 
 async function seedAnswer() {
   const Questions = await this.service('questions').find();
+  console.info('Question instances: ' + JSON.stringify(Questions));
   return this.service('answers').create([{
     content: JSON.stringify({
       data: [1]
@@ -86,9 +89,7 @@ async function createAll() {
   await Promise.all(transactions);
   await seedQuiz.call(this);
  
-  await Promise.resolve(timeout(500));
   await seedQuestion.call(this);
-  await Promise.resolve(timeout(500));
   await seedAnswer.call(this);
   sequelize.sync();
 }
