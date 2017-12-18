@@ -30,8 +30,8 @@ async function seedQuestion() {
       title: 'Test Quiz'
     }
   });
-  console.info('Quiz instance: ' + JSON.stringify(Quiz));
-  console.info('Quiz ID: ' + Quiz.id);
+  // console.info('Quiz instance: ' + JSON.stringify(Quiz));
+  // console.info('Quiz ID: ' + Quiz.id);
   return this.service('questions').create([{
     title: 'How are you?',
     type: 'single',
@@ -59,7 +59,7 @@ async function seedQuestion() {
 
 async function seedAnswer() {
   const Questions = await this.service('questions').find();
-  console.info('Question instances: ' + JSON.stringify(Questions));
+  // console.info('Question instances: ' + JSON.stringify(Questions));
   return this.service('answers').create([{
     content: JSON.stringify({
       data: [1]
