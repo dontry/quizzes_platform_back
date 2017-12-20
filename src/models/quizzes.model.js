@@ -8,7 +8,6 @@ module.exports = function (app) {
       type: Sequelize.TEXT,
       allowNull: false
     },
-    author: Sequelize.STRING,
     status: {
       type: Sequelize.ENUM('UNPUBLISHED', 'PUBLISHED', 'FINISHED'),
       allowNull: false,
@@ -30,6 +29,14 @@ module.exports = function (app) {
     models.Quiz.hasMany(models.Question, {
       foreignKey: {
         name: 'quizId',
+      }
+    });
+
+    models.Quiz.belongsTo(models.User, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        name: 'author',
+        allowNull: false
       }
     });
   };
