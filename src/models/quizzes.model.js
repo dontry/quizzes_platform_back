@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const sequelize = app.get('sequelize');
 
-  const Model = sequelize.define('quiz', {
+  const Model = sequelize.define('Quiz', {
     title: {
       type: Sequelize.TEXT,
       allowNull: false
@@ -27,10 +27,9 @@ module.exports = function (app) {
   });
 
   Model.associate = (models) => {
-    models['quiz'].hasMany(models['question'], {
-      onDelete: 'cascade',
+    models.Quiz.hasMany(models.Question, {
       foreignKey: {
-        allowNull: false
+        name: 'quizId',
       }
     });
   };

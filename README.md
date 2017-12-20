@@ -1,4 +1,5 @@
-# Quiz-back
+# Quiz-back ![build Status](https://travis-ci.org/dontry/quizzes_platform_back.svg?branch=master)
+
 > The backend server for quizzes platform supported by featherjs
 
 ## About
@@ -10,15 +11,14 @@ This project uses [Feathers](http://feathersjs.com). An open source web framewor
 Getting up and running is as easy as 1, 2, 3.
 
 1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
-2. Install your dependencies
+1. Install your dependencies
 
-    ```
+    ```bash
     cd path/to/quizzes-back; npm install
     ```
+1. Start your app
 
-3. Start your app
-
-    ```
+    ```bash
     npm start
     ```
 
@@ -30,7 +30,7 @@ Simply run `npm test` and all your tests in the `test/` directory will be run.
 
 Feathers has a powerful command line interface. Here are a few things it can do:
 
-```
+```bash
 $ npm install -g feathers-cli             # Install Feathers CLI
 
 $ feathers generate service               # Generate a new Service

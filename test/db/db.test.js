@@ -22,8 +22,7 @@ describe('Routes:', () => {
         .get('/quizzes')
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          // expect(res).to.be.json;
-          expect(res.body.data).to.be.an('array');
+          expect(res.body).to.be.an('array');
           done();
         });
     });
@@ -36,8 +35,10 @@ describe('Routes:', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.data).to.be.an('array');
-          expect(res.body.data[0].title).to.equal('Test Quiz');
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(1);
+          expect(res.body[0].title).to.equal('Test Quiz');
+          expect(res.body[0].Questions).to.be.an('array');
           done();
         });
     });
@@ -94,7 +95,7 @@ describe('Routes:', () => {
           title: 'New Test Quiz'
         })
         .then((res) => {
-          const quizId = res.body.data[0].id;
+          const quizId = res.body[0].id;
           request(app)
             .post('/questions')
             .send([{
@@ -218,6 +219,7 @@ describe('Routes:', () => {
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body[0].title).to.equal('What are your hobbies?');
+        expect(res.body[0].Answers).to.be.an('array');
         done();
       });
     });

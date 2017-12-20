@@ -1,5 +1,4 @@
-const timeout = require('../../src/utils/timeout');
-const modelNames = ['question', 'answer', 'quiz'];
+const modelNames = ['Question', 'Answer', 'Quiz'];
 /* eslint-disable no-alert, no-console */
 function clearAll() {
   const models = this.get('models');
@@ -38,22 +37,22 @@ async function seedQuestion() {
     options: JSON.stringify({
       data: ['Very good', 'Good', 'Average', 'Bad']
     }),
-    quizId: Quiz.data[0].id
+    quizId: Quiz[0].id
   }, {
     title: 'How old are you?',
     type: 'number',
-    quizId: Quiz.data[0].id
+    quizId: Quiz[0].id
   }, {
     title: 'What is your name?',
     type: 'text',
-    quizId: Quiz.data[0].id
+    quizId: Quiz[0].id
   }, {
     title: 'What animals do you like?',
     type: 'multiple',
     options: JSON.stringify({
       data: ['Cat', 'Dog', 'Frog', 'Rat', 'Unicorn']
     }),
-    quizId: Quiz.data[0].id
+    quizId: Quiz[0].id
   }]).catch(e => console.log(e));
 }
 
