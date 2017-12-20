@@ -30,6 +30,6 @@ branches:
   only:
     - master
     - stable
-    - travis
+    - develop
     - /^deploy-.*$/
 
