@@ -1,4 +1,4 @@
-# Quiz-back ![build Status](https://travis-ci.org/dontry/quizzes_platform_back.svg?branch=master)
+# Quiz-back ![build Status](https://travis-ci.org/dontry/quizzes_platform_back.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/dontry/quizzes_platform_back/badge.svg?branch=travis)](https://coveralls.io/github/dontry/quizzes_platform_back?branch=travis)
 
 > The backend server for quizzes platform supported by featherjs
 
