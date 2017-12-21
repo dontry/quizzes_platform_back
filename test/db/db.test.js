@@ -211,43 +211,45 @@ describe('Routes:', () => {
   describe('DELETE /questions', () => {
     it('should delete the question "What are your hobbies?"', (done) => {
       request(app)
-      .delete('/questions')
-      .query({
-        title: 'What are your hobbies?'
-      })
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body[0].title).to.equal('What are your hobbies?');
-        expect(res.body[0].Answers).to.be.an('array');
-        done();
-      });
+        .delete('/questions')
+        .query({
+          title: 'What are your hobbies?'
+        })
+        .set('Accept', 'application/json')
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body[0].title).to.equal('What are your hobbies?');
+          expect(res.body[0].Answers).to.be.an('array');
+          done();
+        });
     });
   });
 
   describe('DELETE /quizzes', () => {
     it('should delete the quiz "New Test Quiz" and corresponding questions', (done) => {
       request(app)
-      .delete('/quizzes')
-      .query({
-        title: 'New Test Quiz'
-      })
-      .set('Accept', 'application/json')
-      .then((res, err) => {
-        expect(res.status).to.equal(200);
-        expect(res.body[0].title).to.equal('New Test Quiz');
-        return res.body[0];
-      })
-      .then((res, err) => {
-        request(app)
-        .get('/questions')
-        .query({quizId: res.id})
-        .end((err, res) => {
-          expect(res.body).to.be.an('array');
-          expect(res.body.length).to.equal(0);
-          done();
+        .delete('/quizzes')
+        .query({
+          title: 'New Test Quiz'
         })
-      });
+        .set('Accept', 'application/json')
+        .then((res, err) => {
+          expect(res.status).to.equal(200);
+          expect(res.body[0].title).to.equal('New Test Quiz');
+          return res.body[0];
+        })
+        .then((res, err) => {
+          request(app)
+            .get('/questions')
+            .query({
+              quizId: res.id
+            })
+            .end((err, res) => {
+              expect(res.body).to.be.an('array');
+              expect(res.body.length).to.equal(0);
+              done();
+            })
+        });
     });
   });
 });

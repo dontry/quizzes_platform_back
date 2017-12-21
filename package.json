@@ -28,7 +28,7 @@
     "start": "node src/",
     "debug": "node --nolazy --inspect-brk=9229 src/",
     "test": "mocha test/ --recursive --exit",
-    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "cover": "./node_modules/.bin/istanbul --harmony cover ./node_modules/mocha/bin/_mocha --report lcovonly  -- -R spec test/  --recursive --exit"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
