@@ -28,7 +28,7 @@ describe('Authentication: ', () => {
   before(done => {
     this.server = app.listen(3030);
     dbTest = createDbTest(app);
-    dbTest.createAll().then(() => {
+    dbTest.seedUser().then(() => {
         const options = Object.assign({}, authOptions, {
           jwt: {
             expiredIn: '1ms'
