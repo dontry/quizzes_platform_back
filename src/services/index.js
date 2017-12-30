@@ -1,3 +1,4 @@
+const users = require('./users/users.service');
 const quizzes = require('./quizzes/quizzes.service');
 const questions = require('./questions/questions.service');
 const answers = require('./answers/answers.service');
@@ -14,6 +15,7 @@ module.exports = async function () {
   }
   app.set('sequelize', sequelize);
 
+  app.configure(users);
   app.configure(quizzes);
   app.configure(questions);
   app.configure(answers);
@@ -26,7 +28,7 @@ module.exports = async function () {
       sequelize.models[modelName].associate(models);
     }
   });
-  
+
   // sync() will create all table if they doesn't exist in database, it returns a Promise;
   await sequelize.sync();
 };

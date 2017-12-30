@@ -5,5 +5,38 @@
   "paginate": {
     "default": 10,
     "max": 50
+  },
+  "authentication": {
+    "idField": "id",
+    "secret": "123",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "localhost",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "exiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "service": "users",
+      "usernameField": "\\username",
+      "passwordField": "password"
+    },
+    "cookie": {
+      "enabled": true,
+      "domain": "localhost",
+      "name": "feathers-jwt",
+      "httpOnly": true,
+      "secure": false
+    }
   }
 }

@@ -5,8 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
-const feathers = require('feathers');
 const configuration = require('feathers-configuration');
+const feathers = require('feathers');
 const hooks = require('feathers-hooks');
 const rest = require('feathers-rest');
 const socketio = require('feathers-socketio');
@@ -17,6 +17,8 @@ const notFound = require('feathers-errors/not-found');
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
+
+const authentication = require('./authentication');
 
 const app = feathers();
 
@@ -39,6 +41,7 @@ app.configure(socketio());
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
+app.configure(authentication);
 // Set up Database
 app.configure(services);
 // Configure a middleware for 404s and the error handler

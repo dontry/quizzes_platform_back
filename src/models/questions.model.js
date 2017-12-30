@@ -23,9 +23,8 @@ module.exports = function (app) {
 
   Model.associate = (models) => {
     models.Question.hasMany(models.Answer, {
-      foreignKey: {
-        name: 'quesitonId',
-      }
+      foreignKey: 'quesitonId',
+      as: 'answers'
     });
 
     models.Question.belongsTo(models.Quiz, {
