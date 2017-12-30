@@ -28,7 +28,7 @@ module.exports = async function () {
       sequelize.models[modelName].associate(models);
     }
   });
-  
+
   // sync() will create all table if they doesn't exist in database, it returns a Promise;
   await sequelize.sync();
 };

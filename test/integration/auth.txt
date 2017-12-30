@@ -1,0 +1,93 @@
+  //   it('returns a valid access token', done => {
+  //     request(app)
+  //       .post('/authentication')
+  //       .send(data)
+  //       .then(res => {
+  //         expect(res.body.accessToken).to.exist;
+  //         return client.passport.verifyJWT(res.body.accessToken, app.get('authentication'));
+  //       })
+  //       .then(payload => {
+  //         expect(payload).to.exist;
+  //         expect(payload.iss).to.equal(authOptions.jwt.issuer);
+  //         done();
+  //       })
+  //   });
+  // });
+
+  // describe('when calling a protected service method', () => {
+  //   describe('when header is invalid', () => {
+  //     it('returns not authenticated error', done => {
+  //       request(app)
+  //         .get('/users')
+  //         .set('X-Authorization', accessToken)
+  //         .then(res => {
+  //           expect(res).to.not.be.ok;
+  //         })
+  //         .catch(err => {
+  //           expect(err.actual).exist;
+  //           expect(err.actual.body.code).to.equal(401);
+  //           expect(err.actual.body.name).to.equal('NotAuthenticated');
+  //           expect(err.actual.body.message).to.equal('No auth token');
+  //         })
+  //         .then(() => done());
+  //     });
+  //   });
+
+  //   describe('when token is invalid', () => {
+  //     it('should return not authenticated error', done => {
+  //       request(app)
+  //         .get('/users')
+  //         .query({
+  //           Authorization: 'invalid'
+  //         })
+  //         .then(res => {
+  //           expect(res).to.not.be.ok;
+  //         })
+  //         .catch(err => {
+  //           expect(err.actual.body).to.exist;
+  //           expect(err.actual.body.code).to.equal(401);
+  //           expect(err.actual.body.name).to.equal('NotAuthenticated');
+  //           expect(err.actual.body.message).to.equal('No auth token');
+  //         })
+  //         .then(() => done());
+  //     });
+
+  //     describe('when token is expired', () => {
+  //       it('should return not authenticated error', done => {
+  //         request(app)
+  //           .get('/users')
+  //           .query({
+  //             Authorization: expiredToken
+  //           })
+  //           .then(res => {
+  //             expect(res).to.not.be.ok;
+  //           })
+  //           .catch(err => {
+  //             expect(err.actual.body).to.exist;
+  //             expect(err.actual.body.code).to.equal(401);
+  //             expect(err.actual.body.name).to.equal('NotAuthenticated');
+  //             expect(err.actual.body.message).to.equal('No auth token');
+  //           })
+  //           .then(() => done());
+  //       });
+  //     });
+
+  //     describe('when token is valid', () => {
+  //       it('should return data', done => {
+  //         request(app)
+  //           .get('/users')
+  //           .query('Authorization', accessToken)
+  //           .then(res => {
+  //             expect(res.body.length).to.be.above(0);
+  //             epxect(res.body[0].username).to.equal('alex');
+  //           })
+  //           .catch(err => {
+  //             expect(err.actual.body).to.exist;
+  //             expect(err.actual.body.code).to.equal(401);
+  //             expect(err.actual.body.name).to.equal('NotAuthenticated');
+  //             expect(err.actual.body.message).to.equal('No auth token');
+  //           })
+  //           .then(() => done());
+  //       })
+  //     })
+  //   });

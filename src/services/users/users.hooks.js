@@ -22,7 +22,8 @@ function includeQuiz() {
     const Quiz = hook.app.get('models').Quiz;
     const association = {
       include: [{
-        model: Quiz
+        model: Quiz,
+        as: 'quizzes'
       }]
     };
     switch (hook.type) {

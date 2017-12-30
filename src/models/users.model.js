@@ -22,13 +22,14 @@ module.exports = function (app) {
     gender: {
       type: Sequelize.ENUM('MALE', 'FEMALE', 'OTHER')
     }
+  }, {
+    freezeTableName: true
   });
 
   Model.associate = (models) => {
     models.User.hasMany(models.Quiz, {
-      foreignKey: {
-        name: 'author'
-      }
+      foreignKey: 'author',
+      as: 'quizzes'
     });
   };
 

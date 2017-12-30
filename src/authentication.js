@@ -6,7 +6,7 @@ module.exports = function () {
   const app = this;
   const config = app.get('authentication');
 
-  //Set up authentication strategies with secret 
+  //Set up authentication strategies with secret
   app.configure(authentication(config));
   app.configure(jwt());
   app.configure(local());

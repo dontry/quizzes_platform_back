@@ -5,7 +5,8 @@ function includeQuestion() {
     const Question = hook.app.get('models').Question;
     const association = {
       include: [{
-        model: Question
+        model: Question,
+        as: 'questions'
       }]
     };
     switch (hook.type) {

@@ -1,4 +1,4 @@
-const modelNames = ['Question', 'Answer', 'Quiz'];
+const modelNames = ['Answer', 'Question', 'Quiz', 'User'];
 /* eslint-disable no-alert, no-console */
 function clearAll() {
   const models = this.get('models');
@@ -12,14 +12,33 @@ function clearAll() {
   });
   return transactions;
 }
-
-function seedQuiz() {
+function  seedUser() {
+  return this.service('users').create([{
+    username: 'alex',
+    password: '123',
+    firstname: 'Alexander',
+    lastname: 'Granham',
+    gender: 'male'
+  },{
+    username: 'alice',
+    password: '123',
+    firstname: 'Alice',
+    lastname: 'Williams',
+    gender: 'female'
+  }]);
+}
+async function seedQuiz() {
+  const User = await this.service('users').find({
+    query: {
+      username: 'alex'
+    }
+  });
   return this.service('quizzes').create([{
     title: 'Test Quiz',
-    author: 'Dong Cai'
+    author: User[0].id
   }, {
     title: 'Test Quiz 2',
-    author: 'Dong Cai'
+    author: User[0].id
   }], ).catch(e => console.info(e));
 }
 
@@ -86,8 +105,8 @@ async function createAll() {
   const sequelize = this.get('sequelize');
   const transactions = clearAll.call(this);
   await Promise.all(transactions);
+  await seedUser.call(this);
   await seedQuiz.call(this);
-
   await seedQuestion.call(this);
   await seedAnswer.call(this);
   sequelize.sync();
@@ -98,6 +117,7 @@ module.exports = function (app) {
   return {
     clearAll: clearAll.bind(app),
     createAll: createAll.bind(app),
+    seedUser: seedUser.bind(app),
     seedQuiz: seedQuiz.bind(app),
     seedQuestion: seedQuestion.bind(app),
     seedAnswer: seedAnswer.bind(app)
