@@ -12,14 +12,14 @@ function clearAll() {
   });
   return transactions;
 }
-function  seedUser() {
-  return this.service('users').create([{
+async function seedUser() {
+  return await this.service('users').create([{
     username: 'alex',
     password: '123',
     firstname: 'Alexander',
     lastname: 'Granham',
     gender: 'male'
-  },{
+  }, {
     username: 'alice',
     password: '123',
     firstname: 'Alice',
@@ -103,8 +103,14 @@ async function seedAnswer() {
 
 async function createAll() {
   const sequelize = this.get('sequelize');
-  const transactions = clearAll.call(this);
-  await Promise.all(transactions);
+  try {
+    const transactions = clearAll.call(this);
+    transactions.forEach(async(transaction) => {
+      await transaction;
+    });
+  } catch(error) {
+    console.error(`Error: ${error}`);
+  }
   await seedUser.call(this);
   await seedQuiz.call(this);
   await seedQuestion.call(this);

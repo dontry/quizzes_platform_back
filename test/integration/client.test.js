@@ -92,6 +92,7 @@ describe('Feathers Client:', () => {
           expect(users).to.exist;
           expect(users).to.be.an('array');
           expect(users[0].quizzes).to.be.an('array');
+          expect(users[0].quizzes.length).to.be.above(0);
         })
         .then(() => done());
     });
@@ -107,6 +108,7 @@ describe('Feathers Client:', () => {
           expect(quizzes).to.exist;
           expect(quizzes).to.be.an('array');
           expect(quizzes[0].questions).to.be.an('array');
+          expect(quizzes[0].questions.length).to.be.above(0);
         })
         .then(() => done());
     });
@@ -345,6 +347,7 @@ describe('Feathers Client:', () => {
           expect(questions).to.be.an('array');
           expect(questions[0].title).to.equal('What are your hobbies?');
           expect(questions[0].answers).to.be.an('array');
+          expect(questions[0].answer.length).to.be.above(0);
         })
         .then(() => done());
     });
@@ -366,6 +369,7 @@ describe('Feathers Client:', () => {
           expect(quizzes).to.be.an('array');
           expect(quizzes[0].title).to.equal('New Test Quiz');
           expect(quizzes[0].questions).to.be.an('array');
+          expect(quizzes[0].questions).to.be.above(0);
         })
         .then(() => done());
     });

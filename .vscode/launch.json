@@ -15,7 +15,7 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/test/integration/auth.test.js"
+        "${workspaceFolder}/test/integration/rest.test.js"
       ],
       "internalConsoleOptions": "openOnSessionStart"
     },

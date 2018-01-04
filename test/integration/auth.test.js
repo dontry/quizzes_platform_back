@@ -5,7 +5,6 @@ const rest = require('feathers-rest/client');
 const localStorage = require('localstorage-memory');
 const hooks = require('feathers-hooks');
 const superagent = require('superagent');
-const Promise =require('bluebird');
 
 const client = feathers();
 client.configure(hooks())
@@ -34,9 +33,12 @@ describe('Authentication: ', () => {
             expiredIn: '1ms'
           }
         });
-        expiredToken = app.passport.createJWT({}, options); //create expired token for testing
+        return app.passport.createJWT({}, options); //create expired token for testing
       })
-      .then(() => done());
+      .then(token => {
+        expiredToken = token;
+        done()
+      });
   });
 
   after((done)=> {

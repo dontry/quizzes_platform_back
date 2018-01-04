@@ -4,7 +4,7 @@ const config = {
   host: 'localhost',
   dialect: 'mysql',
   operatorsAliases: false,
-  logging: false
+  logging: true
 };
 
 module.exports = function (app) {
