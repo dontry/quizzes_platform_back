@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha Tests for Auth",
+      "name": "Mocha Tests for REST",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
         "-u",
@@ -16,6 +16,21 @@
         "999999",
         "--colors",
         "${workspaceFolder}/test/integration/rest.test.js"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Mocha Tests for Auth",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test/integration/auth.test.js"
       ],
       "internalConsoleOptions": "openOnSessionStart"
     },

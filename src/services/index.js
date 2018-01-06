@@ -3,12 +3,12 @@ const quizzes = require('./quizzes/quizzes.service');
 const questions = require('./questions/questions.service');
 const answers = require('./answers/answers.service');
 const initSequelize = require('../config/db');
-const initSequelizeTest= require('../config/db.test');
+const initSequelizeTest = require('../config/db.test');
 
 module.exports = async function () {
   const app = this; // eslint-disable-line no-unused-vars
   let sequelize;
-  if(process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === 'test') {
     sequelize = initSequelizeTest(app);
   } else {
     sequelize = initSequelize(app);
@@ -23,12 +23,11 @@ module.exports = async function () {
   app.set('models', sequelize.models);
   const models = app.get('models');
 
-  Object.keys(sequelize.models).forEach(modelName => {
+  Object.keys(sequelize.models).forEach((modelName) => {
     if ('associate' in sequelize.models[modelName]) {
       sequelize.models[modelName].associate(models);
     }
   });
-
   // sync() will create all table if they doesn't exist in database, it returns a Promise;
-  await sequelize.sync();
+  //await sequelize.sync();
 };

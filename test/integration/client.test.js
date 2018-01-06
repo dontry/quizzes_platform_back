@@ -1,10 +1,8 @@
-const createDbTest = require('./seed');
 const auth = require('@feathersjs/authentication-client');
 const feathers = require('feathers/client');
 const rest = require('feathers-rest/client');
 const localStorage = require('localstorage-memory');
 const hooks = require('feathers-hooks');
-const superagent = require('superagent');
 
 const client = feathers();
 client.configure(hooks())
@@ -13,7 +11,6 @@ client.configure(hooks())
     storage: localStorage
   }));
 
-let dbTest;
 const Credential = {
   strategy: 'local',
   username: 'alex',
@@ -23,22 +20,24 @@ const Credential = {
 
 describe('Feathers Client:', () => {
   before(done => {
-    this.server = app.listen(3030);
-    dbTest = createDbTest(app);
-    Promise.resolve(dbTest.createAll())
-      .then(() => done());
+    this.server = app.listen(3030, async() => {
+      await app.get('sequelize').sync();
+      await dbTest.createAll('CLIENT')
+      done()
+    });
   });
 
   after(done => {
-    const transactions = dbTest.clearAll();
-    const _this = this;
-    transactions.push(new Promise(() => {
-      client.logout();
-      _this.server.close(done);
-    }))
-    transactions.forEach(async(transaction) => {
-      await transaction;
-    });
+    dbTest.clearAll('CLIENT')
+      .then( async() => {
+        await client.logout();
+        await this.server.close();
+      })
+      .catch((err) => {
+        console.log('ERROR:' + err);
+        this.server.close();
+      })
+      .then(() => done());
   });
 
   describe('Login failure', () => {
@@ -347,7 +346,7 @@ describe('Feathers Client:', () => {
           expect(questions).to.be.an('array');
           expect(questions[0].title).to.equal('What are your hobbies?');
           expect(questions[0].answers).to.be.an('array');
-          expect(questions[0].answer.length).to.be.above(0);
+          expect(questions[0].answers.length).to.be.above(0);
         })
         .then(() => done());
     });
@@ -369,7 +368,7 @@ describe('Feathers Client:', () => {
           expect(quizzes).to.be.an('array');
           expect(quizzes[0].title).to.equal('New Test Quiz');
           expect(quizzes[0].questions).to.be.an('array');
-          expect(quizzes[0].questions).to.be.above(0);
+          expect(quizzes[0].questions.length).to.be.above(0);
         })
         .then(() => done());
     });

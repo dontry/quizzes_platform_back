@@ -20,34 +20,36 @@ const appHooks = require('./app.hooks');
 
 const authentication = require('./authentication');
 
-const app = feathers();
+module.exports = (function() {
+  const app = feathers();
 
-// Load app configuration
-app.configure(configuration());
-// Enable CORS, security, compression, favicon and body parsing
-app.use(cors());
-app.use(helmet());
-app.use(compress());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
-// Host the public folder
-app.use('/', feathers.static(app.get('public')));
+  // Load app configuration
+  app.configure(configuration());
+  // Enable CORS, security, compression, favicon and body parsing
+  app.use(cors());
+  app.use(helmet());
+  app.use(compress());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+  // Host the public folder
+  app.use('/', feathers.static(app.get('public')));
 
-// Set up Plugins and providers
-app.configure(hooks());
-app.configure(rest());
-app.configure(socketio());
+  // Set up Plugins and providers
+  app.configure(hooks());
+  app.configure(rest());
+  app.configure(socketio());
 
-// Configure other middleware (see `middleware/index.js`)
-app.configure(middleware);
-app.configure(authentication);
-// Set up Database
-app.configure(services);
-// Configure a middleware for 404s and the error handler
-app.use(notFound());
-app.use(handler());
+  // Configure other middleware (see `middleware/index.js`)a
+  app.configure(middleware);
+  app.configure(authentication);
+  // Set up Database
+  app.configure(services);
+  // Configure a middleware for 404s and the error handler
+  app.use(notFound());
+  app.use(handler());
 
-app.hooks(appHooks);
+  app.hooks(appHooks);
+  return app;
+})();
 
-module.exports = app;

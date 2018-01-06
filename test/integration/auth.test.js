@@ -1,4 +1,4 @@
-const createDbTest = require('./seed');
+const createDbTest = require('../fixture/seed');
 const auth = require('@feathersjs/authentication-client');
 const feathers = require('feathers/client');
 const rest = require('feathers-rest/client');
@@ -12,7 +12,6 @@ client.configure(hooks())
   .configure(auth({
     storage: localStorage
   }));
-let dbTest;
 let expiredToken;
 let accessToken;
 let authOptions = app.get('authentication');;
@@ -25,32 +24,24 @@ const Credential = {
 
 describe('Authentication: ', () => {
   before(done => {
-    this.server = app.listen(3030);
-    dbTest = createDbTest(app);
-    dbTest.seedUser().then(() => {
-        const options = Object.assign({}, authOptions, {
-          jwt: {
-            expiredIn: '1ms'
-          }
-        });
-        return app.passport.createJWT({}, options); //create expired token for testing
-      })
-      .then(token => {
-        expiredToken = token;
-        done()
+    this.server = app.listen(3030, async() => {
+      await app.get('sequelize').sync();
+      await dbTest.seedUser();
+      const options = Object.assign({}, authOptions, {
+        jwt: {
+          expiredIn: '1ms'
+        }
       });
+      expiredToken = await app.passport.createJWT({}, options); //create expired token for testing
+      done();
+    });
   });
 
-  after((done)=> {
-    const transactions = dbTest.clearAll();
-    const _this = this;
-    transactions.push(new Promise(() => {
-      client.logout();
-      _this.server.close(done);
-    }))
-    transactions.forEach(async(transaction) => {
-      await transaction;
-    });
+  after((done) => {
+    dbTest.clearAll('AUTH')
+      .then(() => {
+        this.server.close(done);
+      })
   });
 
   describe('Login', () => {
@@ -188,7 +179,7 @@ describe('Authentication: ', () => {
     });
 
     //TODO: what is client.once()??
-    it.skip('`logout` event', done => {
+    it('`logout` event', done => {
       client.once('logout', () => done());
 
       client.authenticate(Credential).then(res => {

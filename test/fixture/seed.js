@@ -1,6 +1,7 @@
 const modelNames = ['Answer', 'Question', 'Quiz', 'User'];
 /* eslint-disable no-alert, no-console */
-function clearAll() {
+async function clearAll(func = 'UNKNOWN') {
+  console.log(`================CLEAR ALL INVOKED BY ${func}=======================`);
   const models = this.get('models');
   let transactions = [];
   modelNames.forEach(modelName => {
@@ -10,7 +11,13 @@ function clearAll() {
     });
     transactions.push(transaction);
   });
-  return transactions;
+  await Promise.all(transactions.map(async(transaction) => {
+    const res = await transaction;
+    console.log(`Transaction: ${res}`);
+  }));
+  //TODO: something wrong when deleting all entries in Client test;
+  // await this.get('sequelize').sync();
+  console.log(`================CLEAR ALL OVER ${func}=======================`);
 }
 async function seedUser() {
   return await this.service('users').create([{
@@ -101,21 +108,15 @@ async function seedAnswer() {
   }]);
 }
 
-async function createAll() {
-  const sequelize = this.get('sequelize');
-  try {
-    const transactions = clearAll.call(this);
-    transactions.forEach(async(transaction) => {
-      await transaction;
-    });
-  } catch(error) {
-    console.error(`Error: ${error}`);
-  }
+async function createAll(func = 'UNKNOWN') {
+  console.log(`================CREATE ALL INVOKED BY ${func}=======================`);
+  // await clearAll.call(this, func);
   await seedUser.call(this);
   await seedQuiz.call(this);
   await seedQuestion.call(this);
   await seedAnswer.call(this);
-  sequelize.sync();
+  await this.get('sequelize').sync();
+  console.log('================CREATE ALL OVER=======================');
 }
 
 
