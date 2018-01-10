@@ -2,9 +2,9 @@
 process.env.NODE_ENV = 'test';
 const logger = require('winston');
 const app = require('../src/app');
-const server = app.listen(8686);
 const createDbTest = require('../test/fixture/seed');
-
+const port = 8686;
+const server = app.listen(port);
 
 
 console.log('=====================RUN SERVER ON 8686=====================');
@@ -22,5 +22,5 @@ app.get('sequelize').sync()
 
 
 server.on('listening', () =>
-  logger.info('Feathers application started on http://%s:%d', app.get('host'), 8686)
+  logger.info('Feathers application started on http://%s:%d', app.get('host'), port)
 );

@@ -1,4 +1,7 @@
 const modelNames = ['Answer', 'Question', 'Quiz', 'User'];
+const logger = require('winston');
+
+
 /* eslint-disable no-alert, no-console */
 async function clearAll(func = 'UNKNOWN') {
   logger.info(`================CLEAR ALL INVOKED BY ${func}=======================`);
