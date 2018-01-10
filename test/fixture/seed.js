@@ -1,7 +1,10 @@
 const modelNames = ['Answer', 'Question', 'Quiz', 'User'];
+const logger = require('winston');
+
+
 /* eslint-disable no-alert, no-console */
 async function clearAll(func = 'UNKNOWN') {
-  console.log(`================CLEAR ALL INVOKED BY ${func}=======================`);
+  logger.info(`================CLEAR ALL INVOKED BY ${func}=======================`);
   const models = this.get('models');
   let transactions = [];
   modelNames.forEach(modelName => {
@@ -13,11 +16,20 @@ async function clearAll(func = 'UNKNOWN') {
   });
   await Promise.all(transactions.map(async(transaction) => {
     const res = await transaction;
-    console.log(`Transaction: ${res}`);
+    logger.info(`Transaction: ${res}`);
   }));
   //TODO: something wrong when deleting all entries in Client test;
   // await this.get('sequelize').sync();
-  console.log(`================CLEAR ALL OVER ${func}=======================`);
+  logger.info(`================CLEAR ALL OVER ${func}=======================`);
+}
+async function dropAll(func = 'UNKNOWN') {
+  logger.info(`================DROP ALL INVOKED BY ${func}=======================`);
+  const sequelize = this.get('sequelize');
+  const res = await sequelize.drop({
+    cascade: true
+  });
+  logger.info(`DROP TALBES: ${JSON.stringify(res)}`)
+  logger.info('================DROP ALL OVER=======================');
 }
 async function seedUser() {
   return await this.service('users').create([{
@@ -41,25 +53,28 @@ async function seedQuiz() {
     }
   });
   return this.service('quizzes').create([{
-    title: 'Test Quiz',
+    title: 'Test Quiz 1',
     author: User[0].id
   }, {
     title: 'Test Quiz 2',
     author: User[0].id
-  }], ).catch(e => console.info(e));
+  }, {
+    title: 'Test Quiz 3',
+    author: User[0].id + 1
+  }], ).catch(e => logger.error(e));
 }
 
 async function seedQuestion() {
   const Quiz = await this.service('quizzes').find({
     query: {
-      title: 'Test Quiz'
+      title: 'Test Quiz 1'
     }
   });
-  // console.info('Quiz instance: ' + JSON.stringify(Quiz));
-  // console.info('Quiz ID: ' + Quiz.id);
+  // logger.info('Quiz instance: ' + JSON.stringify(Quiz));
+  // logger.info('Quiz ID: ' + Quiz.id);
   return this.service('questions').create([{
     title: 'How are you?',
-    type: 'single',
+    type: 'multiple',
     options: JSON.stringify({
       data: ['Very good', 'Good', 'Average', 'Bad']
     }),
@@ -74,17 +89,17 @@ async function seedQuestion() {
     quizId: Quiz[0].id
   }, {
     title: 'What animals do you like?',
-    type: 'multiple',
+    type: 'checkbox',
     options: JSON.stringify({
       data: ['Cat', 'Dog', 'Frog', 'Rat', 'Unicorn']
     }),
     quizId: Quiz[0].id
-  }]).catch(e => console.log(e));
+  }]).catch(e => logger.info(e));
 }
 
 async function seedAnswer() {
   const Questions = await this.service('questions').find();
-  // console.info('Question instances: ' + JSON.stringify(Questions));
+  // logger.info('Question instances: ' + JSON.stringify(Questions));
   return this.service('answers').create([{
     content: JSON.stringify({
       data: [1]
@@ -109,19 +124,19 @@ async function seedAnswer() {
 }
 
 async function createAll(func = 'UNKNOWN') {
-  console.log(`================CREATE ALL INVOKED BY ${func}=======================`);
+  logger.info(`================CREATE ALL INVOKED BY ${func}=======================`);
   // await clearAll.call(this, func);
   await seedUser.call(this);
   await seedQuiz.call(this);
   await seedQuestion.call(this);
   await seedAnswer.call(this);
   await this.get('sequelize').sync();
-  console.log('================CREATE ALL OVER=======================');
+  logger.info('================CREATE ALL OVER=======================');
 }
-
 
 module.exports = function (app) {
   return {
+    dropAll: dropAll.bind(app),
     clearAll: clearAll.bind(app),
     createAll: createAll.bind(app),
     seedUser: seedUser.bind(app),

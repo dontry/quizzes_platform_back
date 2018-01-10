@@ -31,6 +31,7 @@
     "cover": "./node_modules/.bin/istanbul --harmony cover ./node_modules/mocha/bin/_mocha --report lcovonly  -- -R spec test/  --recursive --exit"
   },
   "dependencies": {
+    "@feathersjs/authentication-oauth2": "^1.0.3",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
     "cors": "^2.8.4",
@@ -45,6 +46,7 @@
     "feathers-socketio": "^2.0.1",
     "helmet": "^3.9.0",
     "mysql2": "^1.5.1",
+    "passport-facebook": "^2.1.1",
     "serve-favicon": "^2.4.5",
     "winston": "^2.4.0"
   },

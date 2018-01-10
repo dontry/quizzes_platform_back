@@ -1,4 +1,19 @@
 const hydrate = require('feathers-sequelize/hooks/hydrate');
+const {
+  authenticate
+} = require('feathers-authentication').hooks;
+const {
+  restrictToOwner
+} = require('feathers-authentication-hooks');
+
+const restrict = [
+  authenticate('jwt'),
+  restrictToOwner({
+    idField: 'id',
+    ownerField: 'author'
+  })
+];
+
 
 function includeQuestion() {
   return function (hook) {
@@ -23,8 +38,13 @@ function includeQuestion() {
 }
 module.exports = {
   before: {
-    all: [includeQuestion()]
+    find: [...restrict, includeQuestion()],
+    get: [...restrict, includeQuestion()],
+    update: [...restrict, includeQuestion()],
+    patch: [...restrict, includeQuestion()],
+    remove: [...restrict, includeQuestion()]
   },
+
   after: {
     all: [includeQuestion()]
   }
