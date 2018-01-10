@@ -22,7 +22,7 @@ const Credential = {
 };
 
 
-describe('Authentication: ', () => {
+describe('############### AUTHENTICATION TEST ################', () => {
   before(done => {
     this.server = app.listen(3030, async() => {
       await app.get('sequelize').sync();

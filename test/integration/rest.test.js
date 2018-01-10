@@ -16,7 +16,7 @@ const Credential = {
 };
 
 
-describe('Rest: ', () => {
+describe('############# REST TEST #################', () => {
   before(done => {
     this.server = app.listen(3030, async() => {
       await app.get('sequelize').sync();

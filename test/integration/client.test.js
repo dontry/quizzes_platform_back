@@ -19,7 +19,7 @@ const Credential = {
 
 
 
-describe('Feathers Client:', () => {
+describe('################# CLIENT TEST ###################', () => {
   before(done => {
     this.server = app.listen(3030, async() => {
       await app.get('sequelize').sync();
@@ -77,7 +77,6 @@ describe('Feathers Client:', () => {
     let userId;
 
     it('should login with valid credential', done => {
-      console.log(`##################Credential: ${JSON.stringify(Credential)}`);
       client.authenticate(Credential)
         .then(res => {
           expect(res).to.ok;

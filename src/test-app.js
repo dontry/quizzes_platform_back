@@ -74,11 +74,11 @@ var User = {
 };
 
 app.service('users').create(User).then(user => {
-  console.log('Created default user', user);
+  logger.info('Created default user', user);
 }).catch(console.error);
 
 app.use(errorHandler());
 
 app.listen(3030);
 
-console.log('Feathers authentication with local auth started on 127.0.0.1:3030');
+logger.info('Feathers authentication with local auth started on 127.0.0.1:3030');
