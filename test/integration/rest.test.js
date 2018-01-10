@@ -33,7 +33,7 @@ describe('Rest: ', () => {
   });
 
   after((done) => {
-    dbTest.clearAll('REST')
+    dbTest.dropAll('REST')
       .then(() => {
         this.server.close(done);
       })

@@ -38,7 +38,7 @@ describe('Authentication: ', () => {
   });
 
   after((done) => {
-    dbTest.clearAll('AUTH')
+    dbTest.dropAll('AUTH')
       .then(() => {
         this.server.close(done);
       })

@@ -19,6 +19,14 @@ async function clearAll(func = 'UNKNOWN') {
   // await this.get('sequelize').sync();
   console.log(`================CLEAR ALL OVER ${func}=======================`);
 }
+async function dropAll(func = 'UNKNOWN') {
+  console.log(`================DROP ALL INVOKED BY ${func}=======================`);
+  const sequelize = this.get('sequelize');
+  const res = await sequelize.drop({
+    cascade: true
+  })
+  console.log('================DROP ALL OVER=======================');
+}
 async function seedUser() {
   return await this.service('users').create([{
     username: 'alex',
@@ -41,25 +49,28 @@ async function seedQuiz() {
     }
   });
   return this.service('quizzes').create([{
-    title: 'Test Quiz',
+    title: 'Test Quiz 1',
     author: User[0].id
   }, {
     title: 'Test Quiz 2',
     author: User[0].id
+  }, {
+    title: 'Test Quiz 3',
+    author: User[0].id + 1
   }], ).catch(e => console.info(e));
 }
 
 async function seedQuestion() {
   const Quiz = await this.service('quizzes').find({
     query: {
-      title: 'Test Quiz'
+      title: 'Test Quiz 1'
     }
   });
   // console.info('Quiz instance: ' + JSON.stringify(Quiz));
   // console.info('Quiz ID: ' + Quiz.id);
   return this.service('questions').create([{
     title: 'How are you?',
-    type: 'single',
+    type: 'multiple',
     options: JSON.stringify({
       data: ['Very good', 'Good', 'Average', 'Bad']
     }),
@@ -74,7 +85,7 @@ async function seedQuestion() {
     quizId: Quiz[0].id
   }, {
     title: 'What animals do you like?',
-    type: 'multiple',
+    type: 'checkbox',
     options: JSON.stringify({
       data: ['Cat', 'Dog', 'Frog', 'Rat', 'Unicorn']
     }),
@@ -119,9 +130,9 @@ async function createAll(func = 'UNKNOWN') {
   console.log('================CREATE ALL OVER=======================');
 }
 
-
 module.exports = function (app) {
   return {
+    dropAll: dropAll.bind(app),
     clearAll: clearAll.bind(app),
     createAll: createAll.bind(app),
     seedUser: seedUser.bind(app),
