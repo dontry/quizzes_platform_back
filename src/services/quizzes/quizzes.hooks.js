@@ -1,7 +1,7 @@
 const hydrate = require('feathers-sequelize/hooks/hydrate');
 const {
   authenticate
-} = require('feathers-authentication').hooks;
+} = require('@feathersjs/authentication').hooks;
 const {
   restrictToOwner
 } = require('feathers-authentication-hooks');

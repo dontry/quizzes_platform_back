@@ -1,14 +1,14 @@
 const hydrate = require('feathers-sequelize/hooks/hydrate');
 const {
   authenticate
-} = require('feathers-authentication').hooks;
+} = require('@feathersjs/authentication').hooks;
 const commonHooks = require('feathers-hooks-common');
 const {
   restrictToOwner
 } = require('feathers-authentication-hooks');
 const {
   hashPassword
-} = require('feathers-authentication-local').hooks;
+} = require('@feathersjs/authentication-local').hooks;
 const restrict = [
   authenticate('jwt'),
   restrictToOwner({
