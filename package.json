@@ -27,7 +27,7 @@
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "start": "node src/",
     "debug": "node --nolazy --inspect-brk=9229 src/",
-    "test": "npm run cover",
+    "test": "npm run coverage && nsp check",
     "cover": "./node_modules/.bin/istanbul --harmony cover ./node_modules/mocha/bin/_mocha --report lcovonly  -- -R spec test/  --recursive --exit",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --opts test/mocha.opts"
   },
@@ -68,6 +68,7 @@
     "mocha": "^4.0.1",
     "mocha-lcov-reporter": "^1.3.0",
     "mysql": "^2.15.0",
+    "nsp": "^3.1.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.27.0",
