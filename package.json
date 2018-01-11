@@ -28,7 +28,8 @@
     "start": "node src/",
     "debug": "node --nolazy --inspect-brk=9229 src/",
     "test": "npm run cover",
-    "cover": "./node_modules/.bin/istanbul --harmony cover ./node_modules/mocha/bin/_mocha --report lcovonly  -- -R spec test/  --recursive --exit"
+    "cover": "./node_modules/.bin/istanbul --harmony cover ./node_modules/mocha/bin/_mocha --report lcovonly  -- -R spec test/  --recursive --exit",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --opts test/mocha.opts"
   },
   "dependencies": {
     "@feathersjs/authentication-oauth2": "^1.0.3",

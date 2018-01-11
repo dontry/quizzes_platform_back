@@ -5,7 +5,7 @@ const answers = require('./answers/answers.service');
 const initSequelize = require('../config/db');
 const initSequelizeTest = require('../config/db.test');
 
-module.exports = async function () {
+module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   let sequelize;
   if (process.env.NODE_ENV === 'test') {

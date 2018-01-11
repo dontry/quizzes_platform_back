@@ -1,4 +1,6 @@
 --require test/config
+--recursive test/
 --reporter spec
 --slow 3000
+--timeout 20000
 --exit
