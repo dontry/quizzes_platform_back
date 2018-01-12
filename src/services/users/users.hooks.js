@@ -9,6 +9,14 @@ const {
 const {
   hashPassword
 } = require('@feathersjs/authentication-local').hooks;
+const permissions = require('feathers-permissions').hooks;
+const showHookInfo = require('../../utils/showHookInfo');
+
+const permissionOption = {
+  roles: ['ADMIN', 'SUPER'],
+  on: 'user',
+  field: 'role'
+}
 const restrict = [
   authenticate('jwt'),
   restrictToOwner({
@@ -16,6 +24,13 @@ const restrict = [
     ownerField: 'id'
   })
 ];
+
+const permission = [
+  permissions.checkPermissions(permissionOption),
+  permissions.isPermitted((req, res, next) => {
+    console.info('PERMISSION: ' + JSON.stringify(next));
+  })
+]
 
 function includeQuiz() {
   return function (hook) {
@@ -43,7 +58,25 @@ module.exports = {
   before: {
     find: [authenticate('jwt'), includeQuiz()],
     get: [...restrict],
-    create: [hashPassword()],
+    create: [
+      commonHooks.iff(
+        context => {
+          try {
+            return context.params.headers.authorization;
+          } catch (error) {
+            return null;
+          }
+        },
+        authenticate('jwt')),
+      commonHooks.iff(context => {
+        try {
+          return context.params.authenticated;
+        } catch (event) {
+          return null;
+        }
+      }, permission),
+      hashPassword()
+    ],
     update: [hashPassword()],
     patch: [...restrict, hashPassword()],
     remove: [...restrict]

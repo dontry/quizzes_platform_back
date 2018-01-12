@@ -35,14 +35,16 @@ async function seedUser() {
   return await this.service('users').create([{
     username: 'alex',
     password: '123',
+    role: 'admin',
     firstname: 'Alexander',
     lastname: 'Granham',
     gender: 'male'
   }, {
     username: 'alice',
     password: '123',
+    role: 'user',
     firstname: 'Alice',
-    lastname: 'Williams',
+    lastname: 'Williamson',
     gender: 'female'
   }]);
 }

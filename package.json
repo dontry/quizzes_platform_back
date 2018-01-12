@@ -29,7 +29,7 @@
     "debug": "node --nolazy --inspect-brk=9229 src/",
     "test": "npm run coverage && nsp check",
     "cover": "./node_modules/.bin/istanbul --harmony cover ./node_modules/mocha/bin/_mocha --report lcovonly  -- -R spec test/  --recursive --exit",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --opts test/mocha.opts"
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --opts test/mocha.opts --recursive test/"
   },
   "dependencies": {
     "@feathersjs/authentication": "^2.1.1",
@@ -48,6 +48,7 @@
     "feathers-hooks": "^2.1.2",
     "feathers-hooks-common": "^3.10.0",
     "feathers-memory": "^2.1.0",
+    "feathers-permissions": "^0.1.1",
     "feathers-rest": "^1.8.1",
     "feathers-socketio": "^2.0.1",
     "helmet": "^3.9.0",
