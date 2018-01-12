@@ -5,7 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
-const configuration = require('feathers-configuration');
+const configuration = require('@feathersjs/configuration');
 const feathers = require('feathers');
 const hooks = require('feathers-hooks');
 const rest = require('feathers-rest');

@@ -13,6 +13,14 @@ module.exports = function (app) {
       type: Sequelize.STRING,
       allowNull: false
     },
+    role: {
+      type: Sequelize.ENUM('USER','ADMIN','SUPER'),
+      allowNull: false,
+      defaultValue: 'USER',
+      set(val) {
+        this.setDataValue('role', val.toUpperCase());
+      }
+    },
     firstname: {
       type: Sequelize.STRING
     },

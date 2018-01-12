@@ -192,6 +192,24 @@ describe('################# CLIENT TEST ###################', () => {
       });
     });
 
+    describe('POST /users', () => {
+      it('should fail to create a new user "bob"', done => {
+        client.service('users')
+        .create({
+          username: 'bob',
+          password: '123',
+          gender: 'male',
+          firstname: 'Bobby',
+          lastname: 'brown'
+        })
+        .then( user => {
+          expect(user).to.exist;
+          expect(user.username).to.equal('bob');
+          expect(user.role).to.equal('USER');
+        })
+        .then(() => done());
+      })
+    })
 
     describe('POST /quizzes', () => {
       it('should create "New Test Quiz" ', done => {
