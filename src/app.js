@@ -5,8 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
+const configuration = require('@feathersjs/configuration');
 const feathers = require('feathers');
-const configuration = require('feathers-configuration');
 const hooks = require('feathers-hooks');
 const rest = require('feathers-rest');
 const socketio = require('feathers-socketio');
@@ -18,33 +18,38 @@ const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 
-const app = feathers();
+const authentication = require('./authentication');
 
-// Load app configuration
-app.configure(configuration());
-// Enable CORS, security, compression, favicon and body parsing
-app.use(cors());
-app.use(helmet());
-app.use(compress());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
-// Host the public folder
-app.use('/', feathers.static(app.get('public')));
+module.exports = (function() {
+  const app = feathers();
 
-// Set up Plugins and providers
-app.configure(hooks());
-app.configure(rest());
-app.configure(socketio());
+  // Load app configuration
+  app.configure(configuration());
+  // Enable CORS, security, compression, favicon and body parsing
+  app.use(cors());
+  app.use(helmet());
+  app.use(compress());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+  // Host the public folder
+  app.use('/', feathers.static(app.get('public')));
 
-// Configure other middleware (see `middleware/index.js`)
-app.configure(middleware);
-// Set up Database
-app.configure(services);
-// Configure a middleware for 404s and the error handler
-app.use(notFound());
-app.use(handler());
+  // Set up Plugins and providers
+  app.configure(hooks());
+  app.configure(rest());
+  app.configure(socketio());
 
-app.hooks(appHooks);
+  // Configure other middleware (see `middleware/index.js`)a
+  app.configure(middleware);
+  app.configure(authentication);
+  // Set up Database
+  app.configure(services);
+  // Configure a middleware for 404s and the error handler
+  app.use(notFound());
+  app.use(handler());
 
-module.exports = app;
+  app.hooks(appHooks);
+  return app;
+})();
+

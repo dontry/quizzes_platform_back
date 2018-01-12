@@ -7,19 +7,15 @@ services:
   - mysql
 
 before_install:
-  - mysql -u root --password="" < ./test/db/travis.sql
+  - mysql -u root --password="" < ./test/integration/travis.sql
 
 install:
   - npm install
 
 script:
   - npm run cover
-
-script:
-  - npm test
-
 # Send coverage data to Coveralls
-after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
 
 # Coveralls token
 service_name: travis-pro

@@ -5,7 +5,10 @@ const app = require('../src/app');
 describe('Feathers application tests', () => {
   before(function (done) {
     this.server = app.listen(3030);
-    this.server.once('listening', () => done());
+    this.server.once('listening', async() => {
+      await app.get('sequelize').sync();
+      done()
+    });
   });
 
   after(function (done) {

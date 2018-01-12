@@ -1,11 +1,27 @@
 const hydrate = require('feathers-sequelize/hooks/hydrate');
+const {
+  authenticate
+} = require('@feathersjs/authentication').hooks;
+const {
+  restrictToOwner
+} = require('feathers-authentication-hooks');
+
+const restrict = [
+  authenticate('jwt'),
+  restrictToOwner({
+    idField: 'id',
+    ownerField: 'author'
+  })
+];
+
 
 function includeQuestion() {
   return function (hook) {
     const Question = hook.app.get('models').Question;
     const association = {
       include: [{
-        model: Question
+        model: Question,
+        as: 'questions'
       }]
     };
     switch (hook.type) {
@@ -22,8 +38,13 @@ function includeQuestion() {
 }
 module.exports = {
   before: {
-    all: [includeQuestion()]
+    find: [...restrict, includeQuestion()],
+    get: [...restrict, includeQuestion()],
+    update: [...restrict, includeQuestion()],
+    patch: [...restrict, includeQuestion()],
+    remove: [...restrict, includeQuestion()]
   },
+
   after: {
     all: [includeQuestion()]
   }

@@ -1,4 +1,11 @@
 const Sequelize = require('sequelize');
+const QUESTION_TYPE = {
+  MULTIPLE: 'MULIPLE',
+  TEXT: 'TEXT',
+  CHECKBOX: 'CHECKBOX',
+  NUMBER: 'NUMBER',
+  SCALE: 'SCALE'
+};
 
 module.exports = function (app) {
   const sequelize = app.get('sequelize');
@@ -9,9 +16,9 @@ module.exports = function (app) {
       allowNull: false
     },
     type: {
-      type: Sequelize.ENUM('SINGLE', 'MULTIPLE', 'TEXT', 'NUMBER'),
+      type: Sequelize.ENUM('CHECKBOX', 'MULTIPLE', 'NUMBER', 'TEXT', 'SCALE'),
       allowNull: false,
-      defaultValue: 'SINGLE',
+      defaultValue: 'MULTIPLE',
       set(val) {
         this.setDataValue('type', val.toUpperCase());
       }
@@ -23,9 +30,8 @@ module.exports = function (app) {
 
   Model.associate = (models) => {
     models.Question.hasMany(models.Answer, {
-      foreignKey: {
-        name: 'quesitonId',
-      }
+      foreignKey: 'questionId',
+      as: 'answers'
     });
 
     models.Question.belongsTo(models.Quiz, {
