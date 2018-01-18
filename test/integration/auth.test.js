@@ -170,9 +170,9 @@ describe('############### AUTHENTICATION TEST ################', () => {
         })
         .then(accessToken => {
           expect(accessToken).to.not.exist;
-          return client.service('users').get(0)
+          return client.service('users').get(1)
             .catch(err => {
-              expect(err.code).to.equal(401);
+              expect(err.code).to.equal(403);
             });
         })
         .then(() => done());

@@ -42,7 +42,7 @@ describe('################# CLIENT TEST ###################', () => {
   });
 
   describe('Login failure', () => {
-    it('should fail to get a list of users without authentication', done => {
+    it.skip('should fail to get a list of users without authentication', done => {
       client.service('users').find()
         .then(users => {
           expect(users).to.not.ok; //should not get there
@@ -55,7 +55,7 @@ describe('################# CLIENT TEST ###################', () => {
         .then(() => done());
     });
 
-    it('should fail to get a list of users with invalid credential', done => {
+    it.skip('should fail to get a list of users with invalid credential', done => {
       client.authenticate({})
         .then(() => {
           return client.service('users').find()
@@ -73,7 +73,7 @@ describe('################# CLIENT TEST ###################', () => {
     });
   });
 
-  describe('Login as user "alex": ', () => {
+  describe('Login as ADMIN "alex": ', () => {
     let userId;
 
     it('should login with valid credential', done => {
@@ -98,7 +98,7 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('GET /users', () => {
-      it('should get a list of users', done => {
+      it('should get a list of all users', done => {
         client.service('users').find()
           .then(users => {
             expect(users).to.exist;
