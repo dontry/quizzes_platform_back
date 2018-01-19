@@ -28,7 +28,7 @@ async function dropAll(func = 'UNKNOWN') {
   const res = await sequelize.drop({
     cascade: true
   });
-  logger.info(`DROP TALBES: ${JSON.stringify(res)}`)
+  logger.info(`DROP TALBES: ${JSON.stringify(res)}`);
   logger.info('================DROP ALL OVER=======================');
 }
 async function seedUser() {
@@ -44,14 +44,21 @@ async function seedUser() {
     password: '123',
     role: 'user',
     firstname: 'Alice',
-    lastname: 'Williamson',
+    lastname: 'William',
     gender: 'female'
+  },{
+    username: 'allen',
+    password: '123',
+    role: 'user',
+    firstname: 'Allen',
+    lastname: 'Johnson',
+    gender: 'other'
   }]);
 }
 async function seedQuiz() {
   const User = await this.service('users').find({
     query: {
-      username: 'alex'
+      username: 'alice'
     }
   });
   return this.service('quizzes').create([{
@@ -114,7 +121,7 @@ async function seedAnswer() {
     questionId: Questions[1].id
   }, {
     content: JSON.stringify({
-      data: 'Alex McQueen'
+      data: 'Alice William'
     }),
     questionId: Questions[2].id
   }, {

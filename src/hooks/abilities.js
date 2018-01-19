@@ -25,28 +25,31 @@ function defineAbilitiesFor(user) {
     can
   } = AbilityBuilder.extract();
 
-  can('read', ['quizzes', 'questions']);
 
   if (user) {
     const role = user.role;
     switch (role) {
       case 'USER':
-        can('manage', ['quizzes','questions'], {
-          author: user.id
-        });
-        can(['read', 'update'], 'users', {
+        can(['read','update'], 'users', {
           id: user.id
         });
+        can(['read','create','remove','update'], 'quizzes', {
+          author: user.id
+        });
+        can(['read','create','remove','update'], 'questions');
+        can(['read','remove'], 'answers');
         break;
       case 'ADMIN':
-        can(['read','create','remove'], ['users', 'quizzes','questions','answers']);
+        can(['read','create','remove'], ['users', 'quizzes', 'questions', 'answers']);
         break;
       case 'SUPER':
-        can('manage', ['users','quizzes','questions','answers']);
+        can('manage', ['users', 'quizzes', 'questions', 'answers']);
         break;
       default:
         break;
     }
+  } else {
+    can('read', ['quizzes', 'questions']);
   }
   return new Ability(rules, {
     subjectName
@@ -73,16 +76,20 @@ module.exports = function authorize(name = null) {
 
     if (hook.method === 'create') {
       hook.data[TYPE_KEY] = serviceName;
+      const user = hook.params.user;
+      if (serviceName === 'quizzes' && user.role === 'USER') {
+        hook.data = Object.assign(hook.data, {
+          author: user.id
+        });
+      }
       throwUnlessCan('create', hook.data);
     }
-
+    //Not get service
     if (!hook.id) {
       const rules = hook.params.ability.rulesFor(action, serviceName);
       const query = toSequelizeQuery(rules);
       if (canReadQuery(query)) {
         Object.assign(hook.params.query, query);
-      } else {
-        hook.params.query.$limit = 0;
       }
       return hook;
     }
