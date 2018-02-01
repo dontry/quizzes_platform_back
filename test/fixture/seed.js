@@ -103,6 +103,10 @@ async function seedQuestion() {
       data: ['Cat', 'Dog', 'Frog', 'Rat', 'Unicorn']
     }),
     quizId: Quiz[0].id
+  }, {
+    title: 'Who is your favorite football star?',
+    type: 'text',
+    quizId: Quiz[0].id + 2
   }]).catch(e => logger.info(e));
 }
 

@@ -8,7 +8,7 @@ const {
 const TYPE_KEY = Symbol.for('type');
 const toSequelizeQuery = require('../utils/toSequelizeQuery');
 
-Ability.addAlias('update', 'patch');
+Ability.addAlias('update', ['patch','put']);
 Ability.addAlias('read', ['get', 'find']);
 Ability.addAlias('remove', 'delete');
 

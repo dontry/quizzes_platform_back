@@ -499,6 +499,25 @@ describe('################# CLIENT TEST ###################', () => {
       });
     });
 
+    describe('GET /questions', () => {
+      it('should fail to get question not belonging to her', done => {
+        client.service('questions')
+          .find({
+            query: {
+              title: 'Who is your favorite football star?'
+            }
+          })
+          .then(res => {
+            expect(res).to.not.be.ok;
+          })
+          .catch(err => {
+            expect(err).to.exist;
+            expect(err.message).to.equal('Request for question failed due to user permission.');
+          })
+          .then(() => done());
+      })
+    })
+
     describe('POST /quizzes', () => {
       it('should create "New Test Quiz" ', done => {
         client.service('quizzes')
@@ -583,7 +602,7 @@ describe('################# CLIENT TEST ###################', () => {
         client.service('questions')
           .remove(null, {
             query: {
-              title: 'What are your hobbies?'
+              title: 'What are your hobbies?',
             }
           })
           .then(questions => {
@@ -600,7 +619,7 @@ describe('################# CLIENT TEST ###################', () => {
         client.service('quizzes')
           .remove(null, {
             query: {
-              title: 'Test Quiz 1'
+              title: 'Test Quiz 1',
             }
           })
           .then(quizzes => {

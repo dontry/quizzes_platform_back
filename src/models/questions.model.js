@@ -31,11 +31,12 @@ module.exports = function (app) {
   Model.associate = (models) => {
     models.Question.hasMany(models.Answer, {
       foreignKey: 'questionId',
-      as: 'answers'
+      as: 'answers',
+      onDelete: 'CASCADE'
     });
 
     models.Question.belongsTo(models.Quiz, {
-      onDelete: 'CASCADE',
+      foreignKeyConstraint: true,
       foreignKey: {
         name: 'quizId',
         allowNull: false

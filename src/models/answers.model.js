@@ -14,7 +14,7 @@ module.exports = function (app) {
 
   Model.associate = (models) => {
     models.Answer.belongsTo(models.Question, {
-      onDelete: 'CASCADE',
+      foreignKeyConstraint: true,
       foreignKey: {
         name: 'questionId',
         allowNull: false
