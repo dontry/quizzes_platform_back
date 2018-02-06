@@ -133,6 +133,11 @@ async function seedAnswer() {
       data: [1, 2, 3]
     }),
     questionId: Questions[3].id
+  }, {
+    content: JSON.stringify({
+      data: 'Lionel Messi'
+    }),
+    questionId: Questions[4].id
   }]);
 }
 

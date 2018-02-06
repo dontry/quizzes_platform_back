@@ -21,7 +21,7 @@ function addAttributeAuthor() {
         author: hook.params.user.id
       });
     }
-  }
+  };
 }
 
 

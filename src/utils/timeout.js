@@ -1,3 +1,4 @@
+/* istanbul ignore */
 const timeout = (duration) => new Promise((res, rej) => {
   setTimeout(() => {
     res();

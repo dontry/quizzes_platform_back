@@ -8,7 +8,6 @@ const {
 const TYPE_KEY = Symbol.for('type');
 const toSequelizeQuery = require('../utils/toSequelizeQuery');
 
-Ability.addAlias('update', ['patch','put']);
 Ability.addAlias('read', ['get', 'find']);
 Ability.addAlias('remove', 'delete');
 
@@ -22,7 +21,8 @@ function subjectName(subject) {
 function defineAbilitiesFor(user) {
   const {
     rules,
-    can
+    can,
+    cannot
   } = AbilityBuilder.extract();
 
 
@@ -30,26 +30,41 @@ function defineAbilitiesFor(user) {
     const role = user.role;
     switch (role) {
       case 'USER':
-        can(['read','update'], 'users', {
+        can(['read', 'update','patch'], 'users', {
           id: user.id
         });
-        can(['read','create','remove','update'], 'quizzes', {
+        can(['read', 'create', 'remove', 'update','patch'], 'quizzes', {
           author: user.id
         });
-        can(['read','create','remove','update'], 'questions');
-        can(['read','remove'], 'answers');
+        can(['read', 'create', 'remove', 'update','patch'], 'questions');
+        can(['read', 'remove'], 'answers');
+        cannot(['update', 'patch'], 'users', {
+          role: {
+            $ne: user.role
+          }
+        });
+        cannot(['update', 'patch'], 'users', {
+          username: {
+            $ne: user.username
+          }
+        });
+        cannot(['update', 'patch'], 'answers', {
+          role: 'USER'
+        })
         break;
       case 'ADMIN':
-        can(['read','create','remove'], ['users', 'quizzes', 'questions', 'answers']);
+        can(['read', 'remove', 'create'], ['users', 'quizzes', 'questions', 'answers']);
+        cannot(['update','patch'], ['users', 'quizzes', 'questions','answers']);
         break;
       case 'SUPER':
-        can('manage', ['users', 'quizzes', 'questions', 'answers']);
+        can('manage', 'all');
         break;
       default:
         break;
     }
   } else {
     can('read', ['quizzes', 'questions']);
+    can(['create', 'update',''], 'answers');
   }
   return new Ability(rules, {
     subjectName
@@ -61,7 +76,7 @@ function canReadQuery(query) {
 }
 
 module.exports = function authorize(name = null) {
-  return async(hook) => {
+  return async (hook) => {
     const action = hook.method;
     const service = name ? hook.app.service(name) : hook.service;
     const serviceName = name || hook.path;
@@ -77,14 +92,39 @@ module.exports = function authorize(name = null) {
     if (hook.method === 'create') {
       hook.data[TYPE_KEY] = serviceName;
       const user = hook.params.user;
-      if (serviceName === 'quizzes' && user.role === 'USER') {
+      if (user.role === 'USER') {
         hook.data = Object.assign(hook.data, {
           author: user.id
         });
       }
-      throwUnlessCan('create', hook.data);
+      throwUnlessCan(hook.method, hook.data);
     }
-    //Not get service
+
+    //Forbid USER to change their roles or username
+    if (hook.method === 'update' || hook.method === 'patch') {
+      hook.data[TYPE_KEY] = serviceName;
+      const user = hook.params.user;
+      if (serviceName === 'users') {
+        const id = user.id;
+        const username = hook.data.username || user.username;
+        const role = (hook.data.role || user.role).toUpperCase();
+        hook.data = Object.assign(hook.data, {
+          id,
+          username,
+          role,
+        });
+        throwUnlessCan(hook.method, hook.data);
+      }
+
+      if (serviceName === 'answers') {
+        const role = hook.data.role || user.role;
+        hook.data = Object.assign(hook.data, {
+          role
+        });
+        throwUnlessCan(hook.method, hook.data);
+      }
+    }
+    //Not get service (if it has a param id, then no query should exist)
     if (!hook.id) {
       const rules = hook.params.ability.rulesFor(action, serviceName);
       const query = toSequelizeQuery(rules);
@@ -107,7 +147,7 @@ module.exports = function authorize(name = null) {
     const result = await service.get(hook.id, params);
 
     result[TYPE_KEY] = serviceName;
-    throwUnlessCan('get', result);
+    throwUnlessCan(hook.method, result);
 
     if (action === 'get') {
       hook.result = result;

@@ -24,7 +24,7 @@ const Credential = {
 
 describe('############### AUTHENTICATION TEST ################', () => {
   before(done => {
-    this.server = app.listen(3030, async() => {
+    this.server = app.listen(3030, async () => {
       await app.get('sequelize').sync();
       await dbTest.seedUser();
       const options = Object.assign({}, authOptions, {
@@ -55,6 +55,34 @@ describe('############### AUTHENTICATION TEST ################', () => {
             expect(err).exist;
             expect(err.code).to.equal(401);
             expect(err.name).to.equal('NotAuthenticated');
+            expect(err.message).to.equal('Could not find stored JWT and no authentication strategy was given');
+          })
+          .then(() => done());
+      });
+
+      it('should fail to get a list of users without authentication', done => {
+        client.service('users').find()
+          .then(users => {
+            expect(users).to.not.ok; //should not get there
+          })
+          .catch(err => {
+            expect(err).to.exist;
+          })
+          .then(() => done());
+      });
+
+      it('should fail to get a list of users with invalid credential', done => {
+        client.authenticate({})
+          .then(() => {
+            return client.service('users').find()
+          })
+          .then(users => {
+            expect(users).to.not.ok; //should not get there
+          })
+          .catch(err => {
+            expect(err).to.exist;
+            expect(err.code).to.equal(401);
+            expect(err.name).to.equal('NotAuthenticated')
             expect(err.message).to.equal('Could not find stored JWT and no authentication strategy was given');
           })
           .then(() => done());
