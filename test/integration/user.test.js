@@ -399,14 +399,14 @@ describe('################# USER TEST ###################', () => {
           })
           .catch(err => {
             expect(err).to.exist;
-            expect(err.message).to.equal('You are not allowed to update answers');
+            expect(err.message).to.equal('You are not allowed to patch answers');
           })
           .then(() => done());
       })
     })
 
     describe('DELETE /answers', () => {
-      it('should fail to delete anwer 5 due to authorship', done => {
+      it('should fail to delete answer 5 due to authorship', done => {
         client.service('answers')
           .remove(5)
           .then(answer => {

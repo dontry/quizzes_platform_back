@@ -1,11 +1,4 @@
 const Sequelize = require('sequelize');
-const QUESTION_TYPE = {
-  MULTIPLE: 'MULIPLE',
-  TEXT: 'TEXT',
-  CHECKBOX: 'CHECKBOX',
-  NUMBER: 'NUMBER',
-  SCALE: 'SCALE'
-};
 
 module.exports = function (app) {
   const sequelize = app.get('sequelize');

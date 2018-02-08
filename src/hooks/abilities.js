@@ -50,7 +50,7 @@ function defineAbilitiesFor(user) {
         });
         cannot(['update', 'patch'], 'answers', {
           role: 'USER'
-        })
+        });
         break;
       case 'ADMIN':
         can(['read', 'remove', 'create'], ['users', 'quizzes', 'questions', 'answers']);
@@ -63,8 +63,10 @@ function defineAbilitiesFor(user) {
         break;
     }
   } else {
-    can('read', ['quizzes', 'questions']);
-    can(['create', 'update',''], 'answers');
+    can('read', 'quizzes', {
+      status: 'PUBLISHED'
+    });
+    can('create', 'answers');
   }
   return new Ability(rules, {
     subjectName
@@ -80,6 +82,7 @@ module.exports = function authorize(name = null) {
     const action = hook.method;
     const service = name ? hook.app.service(name) : hook.service;
     const serviceName = name || hook.path;
+   const user = hook.params.user;
     const ability = defineAbilitiesFor(hook.params.user);
     const throwUnlessCan = (action, resource) => {
       if (ability.cannot(action, resource)) {
@@ -89,7 +92,7 @@ module.exports = function authorize(name = null) {
 
     hook.params.ability = ability;
 
-    if (hook.method === 'create') {
+    if (user && hook.method === 'create') {
       hook.data[TYPE_KEY] = serviceName;
       const user = hook.params.user;
       if (user.role === 'USER') {
@@ -101,9 +104,8 @@ module.exports = function authorize(name = null) {
     }
 
     //Forbid USER to change their roles or username
-    if (hook.method === 'update' || hook.method === 'patch') {
+    if (user && (hook.method === 'update' || hook.method === 'patch')) {
       hook.data[TYPE_KEY] = serviceName;
-      const user = hook.params.user;
       if (serviceName === 'users') {
         const id = user.id;
         const username = hook.data.username || user.username;
@@ -130,6 +132,9 @@ module.exports = function authorize(name = null) {
       const query = toSequelizeQuery(rules);
       if (canReadQuery(query)) {
         Object.assign(hook.params.query, query);
+      }
+      if(!user) {
+        throwUnlessCan(hook.method, hook.data);
       }
       return hook;
     }

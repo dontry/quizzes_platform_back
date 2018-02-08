@@ -1,4 +1,4 @@
-/* istanbul ignore */
+/* istanbul ignore next */
 const timeout = (duration) => new Promise((res, rej) => {
   setTimeout(() => {
     res();

@@ -22,6 +22,7 @@ app.configure(rest())
   .use('/users', memory())
   .use('/', feathers.static(path.resolve(__dirname, '/public')));
 
+/* istanbul ignore next */
 app.service('authentication').hooks({
   before: {
     create: [

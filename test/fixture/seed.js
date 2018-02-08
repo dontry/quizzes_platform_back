@@ -63,13 +63,16 @@ async function seedQuiz() {
   });
   return this.service('quizzes').create([{
     title: 'Test Quiz 1',
-    author: User[0].id
+    author: User[0].id,
+    status: 'PUBLISHED'
   }, {
     title: 'Test Quiz 2',
-    author: User[0].id
+    author: User[0].id,
+    status: 'UNPUBLISHED'
   }, {
     title: 'Test Quiz 3',
-    author: User[0].id + 1
+    author: User[0].id + 1,
+    status: 'FINISHED'
   }], ).catch(e => logger.error(e));
 }
 
