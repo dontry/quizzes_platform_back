@@ -14,6 +14,16 @@ const restrict = [
   })
 ];
 
+function addAttributeAuthor() {
+  return function (hook) {
+    if (hook.params.user) {
+      hook.data = Object.assign(hook.data, {
+        author: hook.params.user.id
+      });
+    }
+  };
+}
+
 
 function includeQuestion() {
   return function (hook) {
@@ -38,11 +48,12 @@ function includeQuestion() {
 }
 module.exports = {
   before: {
-    find: [...restrict, includeQuestion()],
-    get: [...restrict, includeQuestion()],
-    update: [...restrict, includeQuestion()],
-    patch: [...restrict, includeQuestion()],
-    remove: [...restrict, includeQuestion()]
+    find: [includeQuestion()],
+    get: [includeQuestion()],
+    create: [],
+    update: [includeQuestion()],
+    patch: [includeQuestion()],
+    remove: [includeQuestion()]
   },
 
   after: {

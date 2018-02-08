@@ -37,7 +37,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha Tests for Client",
+      "name": "Mocha Tests for ANONYMOUS",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
         "-u",
@@ -45,7 +45,37 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/test/integration/client.test.js"
+        "${workspaceFolder}/test/integration/anonymous.test.js"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Mocha Tests for USER",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test/integration/user.test.js"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Mocha Tests for ADMIN",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test/integration/admin.test.js"
       ],
       "internalConsoleOptions": "openOnSessionStart"
     },

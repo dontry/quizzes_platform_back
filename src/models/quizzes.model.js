@@ -28,11 +28,11 @@ module.exports = function (app) {
   Model.associate = (models) => {
     models.Quiz.hasMany(models.Question, {
       foreignKey: 'quizId',
-      as: 'questions'
+      as: 'questions',
+      onDelete: 'CASCADE'
     });
 
     models.Quiz.belongsTo(models.User, {
-      onDelete: 'CASCADE',
       foreignKey: {
         name: 'author',
         allowNull: false

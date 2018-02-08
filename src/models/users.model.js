@@ -37,7 +37,8 @@ module.exports = function (app) {
   Model.associate = (models) => {
     models.User.hasMany(models.Quiz, {
       foreignKey: 'author',
-      as: 'quizzes'
+      as: 'quizzes',
+      onDelete: 'CASCADE'
     });
   };
 
