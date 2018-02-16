@@ -1,5 +1,6 @@
 const createService = require('feathers-sequelize');
 const createModel = require('../../models/answers.model');
+const hooks = require('./answers.hook');
 const errorHandler = require('feathers-errors/handler');
 
 module.exports = function () {
@@ -12,4 +13,6 @@ module.exports = function () {
     }))
     .use(errorHandler());
 
+  const service = app.service('answers');
+  service.hooks(hooks);
 };

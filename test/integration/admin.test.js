@@ -11,17 +11,12 @@ client.configure(hooks())
     storage: localStorage
   }));
 
-const Credential = {
-  strategy: 'local',
-  username: 'alex',
-  password: '123'
-};
 
 
 
-describe('################# CLIENT TEST ###################', () => {
+describe('################# ADMIN TEST ###################', () => {
   before(done => {
-    this.server = app.listen(3030, async() => {
+    this.server = app.listen(3030, async () => {
       await app.get('sequelize').sync();
       await dbTest.createAll('CLIENT')
       done()
@@ -30,7 +25,7 @@ describe('################# CLIENT TEST ###################', () => {
 
   after(done => {
     dbTest.dropAll('CLIENT')
-      .then(async() => {
+      .then(async () => {
         await client.logout();
         await this.server.close();
       })
@@ -41,40 +36,14 @@ describe('################# CLIENT TEST ###################', () => {
       .then(() => done());
   });
 
-  describe('Login failure', () => {
-    it('should fail to get a list of users without authentication', done => {
-      client.service('users').find()
-        .then(users => {
-          expect(users).to.not.ok; //should not get there
-        })
-        .catch(err => {
-          expect(err).to.exist;
-          expect(err.code).to.equal(401);
-          expect(err.message).to.equal('No auth token');
-        })
-        .then(() => done());
-    });
-
-    it('should fail to get a list of users with invalid credential', done => {
-      client.authenticate({})
-        .then(() => {
-          return client.service('users').find()
-        })
-        .then(users => {
-          expect(users).to.not.ok; //should not get there
-        })
-        .catch(err => {
-          expect(err).to.exist;
-          expect(err.code).to.equal(401);
-          expect(err.name).to.equal('NotAuthenticated')
-          expect(err.message).to.equal('Could not find stored JWT and no authentication strategy was given');
-        })
-        .then(() => done());
-    });
-  });
-
-  describe('Login as user "alex": ', () => {
+  //=============ADMIN alex========================//
+  describe('Login as ADMIN "alex": ', () => {
     let userId;
+    const Credential = {
+      strategy: 'local',
+      username: 'alex',
+      password: '123'
+    };
 
     it('should login with valid credential', done => {
       client.authenticate(Credential)
@@ -98,12 +67,12 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('GET /users', () => {
-      it('should get a list of users', done => {
+      it('should get a list of all 3 users', done => {
         client.service('users').find()
           .then(users => {
             expect(users).to.exist;
             expect(users).to.be.an('array');
-            expect(users.length).to.be.above(0);
+            expect(users.length).to.equal(3);
             expect(users[0].quizzes).to.be.an('array');
             expect(users[0].quizzes.length).to.be.above(0);
           })
@@ -112,19 +81,19 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('GET /quizzes', () => {
-      it('should get 2 quizzes belonging to "alex"', done => {
+      it('should get all 3 quizzes by ADMIN "alex"', done => {
         client.service('quizzes').find()
           .then(quizzes => {
             expect(quizzes).to.exist;
             expect(quizzes).to.be.an('array');
-            expect(quizzes.length).to.equal(2);
+            expect(quizzes.length).to.equal(3);
             expect(quizzes[0].questions).to.be.an('array');
             expect(quizzes[0].questions.length).to.be.above(0);
           })
           .then(() => done());
       });
 
-      it('should fail to get non-exist quiz whose name is "A Quiz"', done => {
+      it('should fail to get non-exist quiz titled "A Quiz"', done => {
         client.service('quizzes')
           .find({
             query: {
@@ -138,7 +107,7 @@ describe('################# CLIENT TEST ###################', () => {
           .then(() => done());
       })
 
-      it('should fail to get the existing quiz "Test Quiz 3" which does not belong to "alex"', done => {
+      it('should get the existing quiz "Test Quiz 3" which does not belong to "alex"', done => {
         client.service('quizzes')
           .find({
             query: {
@@ -147,10 +116,11 @@ describe('################# CLIENT TEST ###################', () => {
           })
           .then(quizzes => {
             expect(quizzes).to.exist;
-            expect(quizzes.length).to.equal(0);
+            expect(quizzes.length).to.equal(1);
           })
           .then(() => done());
       })
+
       it('should get the quiz with the title "Test Quiz 1"', done => {
         client.service('quizzes')
           .find({
@@ -169,7 +139,7 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('GET /questions', () => {
-      it('should get a list of questions', done => {
+      it('should get all questions', done => {
         client.service('questions').find()
           .then(questions => {
             expect(questions).to.exist;
@@ -181,7 +151,7 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('GET /answers', () => {
-      it('should get a list of answers', done => {
+      it('should get all answers', done => {
         client.service('answers')
           .find()
           .then(answers => {
@@ -193,46 +163,54 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('POST /users', () => {
-      it('should fail to create a new user "bob"', done => {
+      it('should create a new USER "bob"', done => {
         client.service('users')
-        .create({
-          username: 'bob',
-          password: '123',
-          gender: 'male',
-          firstname: 'Bobby',
-          lastname: 'brown'
-        })
-        .then( user => {
-          expect(user).to.exist;
-          expect(user.username).to.equal('bob');
-          expect(user.role).to.equal('USER');
-        })
-        .then(() => done());
-      })
-    })
+          .create({
+            username: 'bob',
+            password: '123',
+            gender: 'male',
+            firstname: 'Bobby',
+            lastname: 'Brown'
+          })
+          .then(user => {
+            expect(user).to.exist;
+            expect(user.username).to.equal('bob');
+            expect(user.role).to.equal('USER');
+          })
+          .then(() => done());
+      });
+    });
 
     describe('POST /quizzes', () => {
-      it('should create "New Test Quiz" ', done => {
-        client.service('quizzes')
-          .create({
-            title: 'New Test Quiz',
-            author: userId
+      it('should create a new quiz "Test Quiz 4" for USER "alice"', done => {
+        client.service('users')
+          .find({
+            query: {
+              username: 'alice'
+            }
+          })
+          .then(users => {
+            return client.service('quizzes')
+              .create({
+                title: 'Test Quiz 4',
+                author: users[0].id
+              })
           })
           .then(quiz => {
             expect(quiz).to.exist;
-            expect(quiz.title).to.equal('New Test Quiz');
+            expect(quiz.title).to.equal('Test Quiz 4');
           })
           .then(() => done());
       });
     });
 
     describe('POST /questions', () => {
-      it('should create 3 questions for "New Test Quiz"', done => {
+      it('should create 3 questions for "Test Quiz 4"', done => {
         //Get the 'New Test Quiz ID first;
         client.service('quizzes')
           .find({
             query: {
-              title: 'New Test Quiz'
+              title: 'Test Quiz 4'
             }
           })
           .then(quizzes => {
@@ -267,7 +245,7 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('POST /answers', () => {
-      it('should create an answer for "How do you go to work?"[MULTIPLE]', (done) => {
+      it('should create an answer for "How do you go to work?"[MULTIPLE]', done => {
         client.service('questions')
           .find({
             query: {
@@ -291,7 +269,7 @@ describe('################# CLIENT TEST ###################', () => {
           .then(() => done());
       });
 
-      it('should create an answer for "What is your favourite movie?"[TEXT]', (done) => {
+      it('should create an answer for "What is your favourite movie?"[TEXT]', done => {
         client.service('questions')
           .find({
             query: {
@@ -315,7 +293,7 @@ describe('################# CLIENT TEST ###################', () => {
           .then(() => done());
       });
 
-      it('should create an answer for "What are your hobbies?"[CHECKBOX]', (done) => {
+      it('should create an answer for "What are your hobbies?"[CHECKBOX]', done => {
         client.service('questions')
           .find({
             query: {
@@ -338,10 +316,61 @@ describe('################# CLIENT TEST ###################', () => {
           })
           .then(() => done());
       });
-    });
+    })
+
+    describe('PATCH /quizzes', () => {
+      it('should fail to change the title of quiz 1', done => {
+        client.service('quizzes')
+          .patch(1, {
+            title: 'Test Quiz 1(changed)'
+          })
+          .then(quiz => {
+            expect(quiz).to.not.ok;
+          })
+          .catch(err => {
+            expect(err).to.exist;
+            expect(err.message).to.equal('You are not allowed to patch quizzes');
+          })
+          .then(() => done());
+      })
+    })
+
+    describe('PATCH /questions', () => {
+      it('should fail to change the title of question 1', done => {
+        client.service('questions')
+          .patch(1, {
+            title: 'New question'
+          })
+          .then(question => {
+            expect(question).to.not.ok;
+          })
+          .catch(err => {
+            expect(err).to.exist;
+            expect(err.message).to.equal('You are not allowed to patch questions');
+          })
+          .then(() => done())
+      })
+    })
+
+    describe('PATCH /answers', () => {
+      it('should fail to change the title of answer 1', done => {
+        client.service('answers')
+          .patch(1, {
+            data: 'New answer'
+          })
+          .then(answer => {
+            expect(answer).to.not.ok;
+          })
+          .catch(err => {
+            expect(err).to.exist;
+            expect(err.message).to.equal('You are not allowed to patch answers');
+          })
+          .then(() => done())
+      })
+    })
 
     describe('DELETE /questions', () => {
-      it('should delete the question "What are your hobbies?"', (done) => {
+      it('should delete the question "What are your hobbies?"', done => {
         client.service('questions')
           .remove(null, {
             query: {
@@ -360,23 +389,22 @@ describe('################# CLIENT TEST ###################', () => {
     });
 
     describe('DELETE /quizzes', () => {
-      it('should delete the quiz "New Test Quiz" and corresponding questions', (done) => {
+      it('should delete the quiz "Test Quiz 4" and corresponding questions', done => {
         client.service('quizzes')
           .remove(null, {
             query: {
-              title: 'Test Quiz 1'
+              title: 'Test Quiz 4'
             }
           })
           .then(quizzes => {
             expect(quizzes).to.exist;
             expect(quizzes).to.be.an('array');
-            expect(quizzes[0].title).to.equal('Test Quiz 1');
+            expect(quizzes[0].title).to.equal('Test Quiz 4');
             expect(quizzes[0].questions).to.be.an('array');
             expect(quizzes[0].questions.length).to.be.above(0);
           })
           .then(() => done());
       });
     });
-
   })
 });

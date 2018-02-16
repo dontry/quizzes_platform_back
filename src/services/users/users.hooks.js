@@ -4,19 +4,20 @@ const {
 } = require('@feathersjs/authentication').hooks;
 const commonHooks = require('feathers-hooks-common');
 const {
-  restrictToOwner
+  restrictToOwner,
+  queryWithCurrentUser,
 } = require('feathers-authentication-hooks');
 const {
   hashPassword
 } = require('@feathersjs/authentication-local').hooks;
 const permissions = require('feathers-permissions').hooks;
-const showHookInfo = require('../../utils/showHookInfo');
 
 const permissionOption = {
   roles: ['ADMIN', 'SUPER'],
   on: 'user',
   field: 'role'
-}
+};
+
 const restrict = [
   authenticate('jwt'),
   restrictToOwner({
@@ -30,7 +31,15 @@ const permission = [
   permissions.isPermitted((req, res, next) => {
     console.info('PERMISSION: ' + JSON.stringify(next));
   })
-]
+];
+
+const restrictToCurrentUser = [
+  queryWithCurrentUser({
+    idField: 'id',
+    as: 'id'
+  })
+];
+
 
 function includeQuiz() {
   return function (hook) {
@@ -56,30 +65,12 @@ function includeQuiz() {
 
 module.exports = {
   before: {
-    find: [authenticate('jwt'), includeQuiz()],
-    get: [...restrict],
-    create: [
-      commonHooks.iff(
-        context => {
-          try {
-            return context.params.headers.authorization;
-          } catch (error) {
-            return null;
-          }
-        },
-        authenticate('jwt')),
-      commonHooks.iff(context => {
-        try {
-          return context.params.authenticated;
-        } catch (event) {
-          return null;
-        }
-      }, permission),
-      hashPassword()
-    ],
+    find: [includeQuiz()],
+    get: [],
+    create: [hashPassword()],
     update: [hashPassword()],
-    patch: [...restrict, hashPassword()],
-    remove: [...restrict]
+    patch: [hashPassword()],
+    remove: []
   },
   after: {
     all: [

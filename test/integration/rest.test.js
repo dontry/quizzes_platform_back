@@ -68,9 +68,6 @@ describe('############# REST TEST #################', () => {
           .catch(err => {
             const errorInfo = err.actual.body || err;
             expect(errorInfo).exist;
-            expect(errorInfo.code).to.equal(401);
-            expect(errorInfo.name).to.equal('NotAuthenticated');
-            expect(errorInfo.message).to.equal('No auth token');
           })
           .then(() => done());
       });
@@ -80,7 +77,7 @@ describe('############# REST TEST #################', () => {
       it('should return not authenticated error', done => {
         request(app)
           .get('/users')
-          .query({
+          .set({
             Authorization: 'invalid'
           })
           .then(res => {
@@ -89,9 +86,8 @@ describe('############# REST TEST #################', () => {
           .catch(err => {
             const errorInfo = err.actual.body || {};
             expect(errorInfo).to.exist;
-            expect(errorInfo.code).to.equal(401);
-            expect(errorInfo.name).to.equal('NotAuthenticated');
-            expect(errorInfo.message).to.equal('No auth token');
+            expect(errorInfo.className).to.equal('not-authenticated');
+            expect(errorInfo.message).to.equal('jwt malformed');
           })
           .then(() => done());
       });
@@ -101,17 +97,16 @@ describe('############# REST TEST #################', () => {
       it('should return not authenticated error', done => {
         request(app)
           .get('/users')
-          .query({
+          .set({
             Authorization: expiredToken
           })
           .then(res => {
             expect(res).to.not.be.ok;
           })
           .catch(err => {
-            expect(err.actual.body).to.exist;
-            expect(err.actual.body.code).to.equal(401);
-            expect(err.actual.body.name).to.equal('NotAuthenticated');
-            expect(err.actual.body.message).to.equal('No auth token');
+            const errorInfo = err.actual.body || {};
+            expect(errorInfo).to.exist;
+            expect(errorInfo.code).to.equal(401);
           })
           .then(() => done());
       });
@@ -122,7 +117,7 @@ describe('############# REST TEST #################', () => {
       it('should return data', done => {
         request(app)
           .get('/users')
-          .query({
+          .set({
             Authorization: accessToken
           })
           .then(res => {
